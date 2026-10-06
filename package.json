@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "dashboard": "node dashboard/server.js",
+    "dashboard:embed": "node dashboard/embed-assets.js",
+    "dashboard:bin": "npm run dashboard:embed && bun build --compile --minify ./dashboard/server.js --outfile ./dist/dashboard-linux-x64",
+    "dashboard:bin:all": "npm run dashboard:embed && bun build --compile --minify --target=bun-linux-x64 ./dashboard/server.js --outfile ./dist/dashboard-linux-x64 && bun build --compile --minify --target=bun-windows-x64 ./dashboard/server.js --outfile ./dist/dashboard-windows-x64.exe && bun build --compile --minify --target=bun-darwin-arm64 ./dashboard/server.js --outfile ./dist/dashboard-macos-arm64 && bun build --compile --minify --target=bun-darwin-x64 ./dashboard/server.js --outfile ./dist/dashboard-macos-x64"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

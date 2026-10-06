@@ -1,3 +1,5 @@
+import portfolioDataJson from "./portfolio-data.json";
+
 export interface ProjectDetail {
   slug: string;
   title: string;
@@ -70,568 +72,61 @@ export interface SkillCategory {
   skills: string[];
 }
 
-export const PORTFOLIO_DATA = {
+export interface ResearchInterest {
+  title: string;
+  summary: string;
+  tags: string[];
+}
+
+export interface AcademicServiceItem {
+  role: string;
+  organization: string;
+  description: string;
+}
+
+export interface HonorCertificationItem {
+  title: string;
+  issuer: string;
+  description: string;
+}
+
+export interface PortfolioData {
   profile: {
-    name: "Lamia Islam",
-    headline: "Machine learning researcher building reliable AI for human-state sensing and robotics.",
-    subline: "B.Sc. in Information and Communication Engineering, Pabna University of Science and Technology (PUST), Bangladesh. ML Engineering Intern at FlyRank AI. Research Assistant at PUST.",
-    location: "Bangladesh",
-    email: "lamiaislamzy@gmail.com",
-    cvPath: "/cv.pdf",
+    name: string;
+    headline: string;
+    subline: string;
+    location: string;
+    email: string;
+    cvPath: string;
     socialLinks: {
-      email: "mailto:lamiaislamzy@gmail.com",
-      github: "https://github.com/Lamia-Islam",
-      linkedin: "https://www.linkedin.com/in/lamia-islam-087943232",
-      scholar: "https://scholar.google.com/citations?user=sFP7LL8AAAAJ",
-      researchgate: "https://www.researchgate.net/profile/Lamia-Islam-13",
-      orcid: "https://orcid.org/0009-0006-2866-5022",
-    },
-    contactNote: "Open to PhD positions, research roles and collaborations. The quickest way to reach me is email.",
-  },
-
-  stats: [
-    {
-      value: "4",
-      label: "Peer-reviewed conference papers",
-      highlight: "IEEE & Springer indexed",
-    },
-    {
-      value: "2",
-      label: "Journal manuscripts under review",
-      highlight: "Elsevier journals",
-    },
-    {
-      value: "0.966",
-      label: "AUROC of thesis competence monitor",
-      highlight: "vs. 0.422 baseline",
-    },
-    {
-      value: "3",
-      label: "IEEE conferences served as peer reviewer",
-      highlight: "RAAICON '25, '26, ICCIT '26",
-    },
-  ],
-
+      email: string;
+      github: string;
+      linkedin: string;
+      scholar: string;
+      researchgate: string;
+      orcid: string;
+    };
+    contactNote: string;
+  };
+  stats: {
+    value: string;
+    label: string;
+    highlight: string;
+  }[];
   about: {
-    openingQuestion: "How does an AI system know when it should not be trusted?",
-    paragraphs: [
-      "I work on a simple question: how does an AI system know when it should not be trusted?",
-      "My undergraduate thesis built a driver-state monitor that reads heart and skin signals from wearables and decides when a robot or vehicle should step in. The key part is that it can tell when the incoming data looks nothing like what it was trained on, and it does this at almost no extra computing cost. The work was motivated by night-shift driver fatigue on Bangladesh's roads, where affordable monitoring does not exist.",
-      "Alongside that, I have built multi-robot search-and-rescue systems in ROS 2, studied why synthetic medical imaging benchmarks can mislead, and prototyped wearable and embedded hardware. I have published four peer-reviewed conference papers, have journal work under review with Elsevier, and review papers for IEEE conferences.",
-      "I graduated in 2026 and am currently an ML Engineering Intern at FlyRank AI and a Research Assistant in my department. I am looking for PhD and research positions.",
-    ],
-  },
+    openingQuestion: string;
+    paragraphs: string[];
+  };
+  researchInterests: ResearchInterest[];
+  featuredProjects: ProjectDetail[];
+  smallerProjects: SmallerProject[];
+  publications: PublicationItem[];
+  experience: ExperienceItem[];
+  education: EducationItem[];
+  skills: SkillCategory[];
+  academicService: AcademicServiceItem[];
+  honorsAndCertifications: HonorCertificationItem[];
+}
 
-  researchInterests: [
-    {
-      title: "Uncertainty, Calibration & Out-of-Distribution Detection",
-      summary: "Designing zero-cost competence monitors, temperature scaling, and calibrated predictive active inference models for safety-critical ML environments.",
-      tags: ["OOD Detection", "Expected Calibration Error", "Marginal Likelihood", "Safety-Critical AI"],
-    },
-    {
-      title: "Physiological Sensing & Affective Computing",
-      summary: "Processing multi-modal biosignals under domain shift, extracting HRV dynamics, EDA decomposition, and fatigue detection across cross-subject wearers.",
-      tags: ["ECG", "EDA", "PPG", "HRV Analysis", "WESAD", "MIT DriveDB"],
-    },
-    {
-      title: "Human-Robot Interaction & Shared Autonomy",
-      summary: "Closed-loop wearable-to-robot handover pipelines, graded human-overridable intervention control, and collaborative safety systems.",
-      tags: ["Shared Autonomy", "Intervention Control", "ROS 2 Humble", "Gazebo Fortress"],
-    },
-    {
-      title: "Medical Image Analysis & Benchmark Design",
-      summary: "Investigating why synthetic medical imaging benchmarks fail to predict clinical ranking, segmentation ablations, and dataset fidelity metrics.",
-      tags: ["Image Segmentation", "U-Net", "Rank Correlation", "Ablation Studies"],
-    },
-    {
-      title: "Longer Term: Child-Centred AI & Therapeutic Robotics",
-      summary: "Developing compassionate and explainable AI solutions tailored for pediatric psychological assessment, emotion regulation, and assistive robotics.",
-      tags: ["Pediatric AI", "Therapeutic Robotics", "Affective HRI"],
-    },
-  ],
-
-  featuredProjects: [
-    {
-      slug: "ndpai-driver-state-monitoring",
-      title: "Competence-Gated Driver-State Monitoring (NDPAI) - Undergraduate Thesis",
-      shortTitle: "Competence-Gated Driver Monitoring (NDPAI)",
-      year: "2026",
-      summary: "A wearable driver-state classifier that knows when it is out of its depth, and hands control decisions to a graded, human-overridable robotic intervention.",
-      problem: "Driver fatigue is a major cause of road accidents in Bangladesh and South Asia, especially on night shifts. Wearable stress and fatigue models trained in the lab often fail silently on real roads, because real driving data looks completely different from lab-induced conditions.",
-      whatBuilt: [
-        "A probabilistic classifier using class-conditional Gaussians on ECG and EDA biosignal features.",
-        "A competence monitor leveraging marginal log-evidence—a value the model already computes and conventionally discards—to flag unfamiliar data at zero extra runtime computation cost.",
-        "Trained on WESAD (15 subjects, lab-induced stress) and evaluated on MIT DriveDB (17 real on-road drives), using rigorous leave-one-subject-out cross-validation.",
-        "Integrated into a complete six-node ROS 2 pipeline: signal replay, inference, confidence gating, and metrics logging running end-to-end over live ROS topics.",
-      ],
-      keyResults: [
-        "Out-of-distribution (OOD) detection AUROC reached 0.966, dramatically outperforming the 0.422 baseline.",
-        "Preserved high in-domain accuracy: 0.841 balanced accuracy, 0.711 macro F1 score.",
-        "Demonstrated safe transfer of temperature scaling under severe domain shift: high-confidence error windows dropped from 41.9% to 10.9%.",
-      ],
-      thesisDetails: {
-        title: "Design and Evaluation of a Competence-Gated Driver-State Monitoring System for Autonomous Intervention Control",
-        defended: "2 September 2026",
-        supervisor: "Dr. Md. Anwar Hossain",
-      },
-      papers: [
-        {
-          status: "Under Review",
-          title: "The discarded denominator: marginal likelihood as a zero-cost competence monitor for wearable driver-state classifiers under domain shift",
-          venue: "Engineering Applications of Artificial Intelligence (Elsevier)",
-        },
-        {
-          status: "Preprint",
-          title: "NDPAI: Neuroscience-Derived Predictive Active Inference for Calibrated Cross-Subject Wearable Stress Detection",
-          venue: "Research Square, 2026",
-          doiUrl: "https://doi.org/10.21203/rs.3.rs-10237429/v2",
-        },
-      ],
-      techTags: ["Python", "scikit-learn", "ROS 2 Humble", "Gazebo Fortress", "ECG/EDA Processing", "HRV", "Calibration", "OOD Detection"],
-      links: [
-        {
-          label: "View Preprint (DOI)",
-          url: "https://doi.org/10.21203/rs.3.rs-10237429/v2",
-          type: "preprint",
-        },
-        {
-          label: "GitHub Profile",
-          url: "https://github.com/Lamia-Islam",
-          type: "code",
-        },
-      ],
-      figureCaption: "NDPAI Competence-Gated Architecture: Real-time biosignal preprocessing, marginal log-evidence confidence calculation, and multi-stage graded robotic handover.",
-    },
-    {
-      slug: "multi-robot-search-and-rescue",
-      title: "Multi-Robot Search and Rescue After Earthquakes",
-      shortTitle: "Multi-Robot Search and Rescue",
-      year: "2026",
-      summary: "Three robots map and search a collapsed building together, using a belief map of where victims are likely to be.",
-      problem: "Disasters like earthquakes create collapsed structures where victims must be located rapidly. Single robots are slow and vulnerable to single-point failure, but coordinating multiple robots in cluttered rubble introduces severe multi-path lidar reflection and spatial allocation deadlocks.",
-      whatBuilt: [
-        "Full ROS 2 Humble and Gazebo simulation system coordinating three differential-drive mobile robots.",
-        "Collaborative SLAM using slam_toolbox, custom multi-robot map merging, wavefront BFS frontier detection, and Hungarian assignment for optimal robot-to-frontier pairing.",
-        "Pure-pursuit path controller with dynamic obstacle clearance.",
-        "Victim sensor and victim-prior nodes maintaining a probabilistic Gaussian belief field over likely human locations.",
-        "Deep diagnosis and resolution of coordinator stalls traced through four system layers to teammate robot lidar returns incorrectly registered as static masonry.",
-      ],
-      keyResults: [
-        "Identified critical spatial pitfall: straight-line Euclidean victim-prior kernels improved open-space coverage but severely deteriorated performance in rubble by placing search probability through collapsed walls.",
-        "Formulated and implemented a geodesic path kernel following walkable topology, successfully restoring exploration coverage and victim localization efficiency.",
-      ],
-      papers: [
-        {
-          status: "Submitted",
-          title: "Victim-Prior Frontier Allocation for Multi-Robot Search: Environment-Dependent Effects and a Geodesic Correction",
-          venue: "Submitted to IEEE ICCIT 2026",
-        },
-      ],
-      techTags: ["ROS 2 Humble", "Gazebo Fortress", "SLAM", "Multi-Robot Coordination", "Path Planning", "Hungarian Algorithm", "Python"],
-      links: [
-        {
-          label: "GitHub Profile",
-          url: "https://github.com/Lamia-Islam",
-          type: "code",
-        },
-      ],
-      figureCaption: "Multi-robot collaborative frontier exploration showing merged occupancy grids, Hungarian frontier allocation, and geodesic victim-belief heatmaps.",
-    },
-    {
-      slug: "synthetic-wound-segmentation-benchmarks",
-      title: "When Do Synthetic Benchmarks Predict Clinical Performance? (Wound Segmentation)",
-      shortTitle: "Synthetic vs. Clinical Benchmark Evaluation",
-      year: "2026",
-      summary: "Shows that two synthetic wound-image benchmarks can rank the same 22 segmentation methods in opposite orders, and finds the reason.",
-      problem: "Synthetic medical imaging data is widely adopted to benchmark deep learning algorithms when real clinical datasets are restricted. However, whether synthetic benchmarks actually predict real-world clinical ranking is rarely evaluated rigorously.",
-      whatBuilt: [
-        "Curated and evaluated an extensive benchmark suite of 22 medical segmentation methods, spanning classic color thresholding to specialized lightweight U-Net variants.",
-        "Conducted cross-evaluation comparing algorithm rank-order performance across two synthetic wound benchmarks against two independent clinical cohorts.",
-        "Executed systematic ablation experiments across lighting, scale, and background textures to pinpoint the root cause of benchmark discordance.",
-      ],
-      keyResults: [
-        "Discovered that the two synthetic benchmarks ranked the 22 segmentation methods in statistically inverted orders (Spearman rho = -0.526, p = 0.014).",
-        "Proved that the two independent clinical datasets strongly agreed with each other (Spearman rho = 0.560, p = 0.008).",
-        "Ablation confirmed background texture realism as the decisive factor determining benchmark predictive validity for clinical environments.",
-      ],
-      papers: [
-        {
-          status: "Manuscript in Preparation",
-          title: "When Do Synthetic Benchmarks Predict Clinical Performance? An Evaluation on Wound Segmentation",
-          venue: "Journal of Imaging Informatics in Medicine (Springer)",
-        },
-        {
-          status: "Preprint",
-          title: "Wound segmentation benchmark study (earlier version)",
-          venue: "Research Square, 2026",
-          doiUrl: "https://doi.org/10.21203/rs.3.rs-10362132/v1",
-        },
-      ],
-      techTags: ["Python", "Computer Vision", "Medical Image Segmentation", "U-Net", "Statistical Evaluation", "Spearman Rank Correlation"],
-      links: [
-        {
-          label: "View Preprint (DOI)",
-          url: "https://doi.org/10.21203/rs.3.rs-10362132/v1",
-          type: "preprint",
-        },
-      ],
-      figureCaption: "Spearman rank correlation matrix demonstrating synthetic ranking inversion vs clinical consensus and texture ablation sensitivity.",
-    },
-    {
-      slug: "6dof-robotic-arm-simulation",
-      title: "6-DOF Robotic Arm Simulation",
-      shortTitle: "6-DOF Robotic Arm Simulation",
-      year: "2025",
-      summary: "A full robotic arm simulation built from scratch in one working session during industrial training.",
-      problem: "Implementing reliable multi-axis forward/inverse kinematics and obstacle avoidance visualization within simulated robotic workcells.",
-      whatBuilt: [
-        "Engineered complete 6-degree-of-freedom manipulator URDF description from geometric specs.",
-        "Integrated motion planning pipelines, collision avoidance boundaries, and visual trajectory execution using ROS 2, MoveIt 2, and RViz.",
-        "Diagnosed and resolved WSL2 graphics hardware acceleration, X-server rendering pipelines, and bridged network socket configurations.",
-      ],
-      keyResults: [
-        "Delivered a fully operational interactive manipulation workspace with zero collision faults and responsive joint planning in RViz.",
-      ],
-      techTags: ["ROS 2", "MoveIt 2", "RViz", "URDF", "WSL2", "Linux"],
-      links: [
-        {
-          label: "GitHub Profile",
-          url: "https://github.com/Lamia-Islam",
-          type: "code",
-        },
-      ],
-      figureCaption: "RViz MoveIt 2 visualization interface showing 6-DOF manipulator kinematic trajectory planning and goal execution.",
-    },
-  ],
-
-  smallerProjects: [
-    {
-      title: "Real-Time RFID Authentication and Access Control System",
-      description: "Microcontroller, firmware, and secure networked logging for automated institutional access control.",
-      publication: "Published at IEEE QPAIN 2026",
-      doi: "https://doi.org/10.1109/QPAIN69676.2026.11546467",
-      tags: ["Embedded", "RFID", "Microcontroller", "Network Logging"],
-    },
-    {
-      title: "IoT NFC Attendance System",
-      description: "Contactless hardware attendance logger engineered with ESP32 and a high-frequency PN532 NFC reader module.",
-      tags: ["ESP32", "PN532 NFC", "IoT", "C++"],
-    },
-    {
-      title: "Wearable Physiological Sensing Prototype",
-      description: "Custom wearable sensor module integrating ESP32, AD8232 ECG analog front-end, and galvanic skin response (GSR) circuitry.",
-      tags: ["ESP32", "AD8232 ECG", "GSR", "Hardware Prototyping"],
-    },
-    {
-      title: "Remote Health Monitoring via PPG on Mobile Devices",
-      description: "Signal processing pipeline and machine learning classification of photoplethysmogram (PPG) waveforms captured on smartphone cameras.",
-      publication: "Published at IEEE ICCIT 2025",
-      doi: "https://doi.org/10.1109/ICCIT68739.2025.11491546",
-      tags: ["PPG", "Biomedical ML", "Mobile Health", "Signal Processing"],
-    },
-    {
-      title: "Nightmare Prediction in Children Using Machine Learning",
-      description: "Pediatric psychological integration using ensemble algorithms to predict fear-related sleep disturbances from behavioral markers.",
-      publication: "Published at IEEE COMPAS 2025",
-      doi: "https://doi.org/10.1109/COMPAS67506.2025.11381639",
-      tags: ["Pediatric AI", "Ensemble ML", "Healthcare", "Data Mining"],
-    },
-    {
-      title: "Hepatitis C Detection Using Ensemble Boosting",
-      description: "Early-stage biomarker classification for liver pathology using gradient boosted decision trees.",
-      publication: "Published at Springer BIM 2026",
-      doi: "https://doi.org/10.1007/978-3-032-15764-5_50",
-      tags: ["Boosting", "Bioinformatics", "Classification", "Springer"],
-    },
-  ],
-
-  publications: [
-    {
-      id: "pub-1",
-      category: "Journal" as const,
-      authors: "Islam, L., & Hossain, M. A.",
-      title: "The discarded denominator: marginal likelihood as a zero-cost competence monitor for wearable driver-state classifiers under domain shift",
-      venue: "Engineering Applications of Artificial Intelligence (Elsevier)",
-      dateOrYear: "Under review, 2026",
-      note: "Under review",
-    },
-    {
-      id: "pub-2",
-      category: "Journal" as const,
-      authors: "Shammo, M. B. A. Z., Debnath, T., Islam, L., Sarker, S., & Habib, J.",
-      title: "Vision-Based Crack Detection and Coverage Planning for Autonomous Mobile Robots",
-      venue: "Array (Elsevier)",
-      dateOrYear: "Under review",
-      note: "Under review",
-    },
-    {
-      id: "pub-3",
-      category: "Conference" as const,
-      authors: "Islam, L., Shammo, M. B. A. Z., & Hossain, M. I.",
-      title: "Real-Time RFID Authentication and Access Control System with Networked Logging",
-      venue: "2026 IEEE 2nd International Conference on Quantum Photonics, Artificial Intelligence & Networking (QPAIN), Chattogram, Bangladesh",
-      dateOrYear: "April 2026",
-      doi: "10.1109/QPAIN69676.2026.11546467",
-      url: "https://doi.org/10.1109/QPAIN69676.2026.11546467",
-    },
-    {
-      id: "pub-4",
-      category: "Conference" as const,
-      authors: "Shammo, M. B. A. Z., Islam, L., Hasan, M., Hossain, M. A., Hossain, M. I., Mia, M. A., & Mohona, M. H.",
-      title: "Machine Learning-Based Hepatitis C Detection Using Ensemble Boosting",
-      venue: "Proceedings of the 3rd International Conference on Big Data, IoT and Machine Learning (BIM), pp. 705-717. Springer Nature Switzerland",
-      dateOrYear: "April 2026",
-      doi: "10.1007/978-3-032-15764-5_50",
-      url: "https://doi.org/10.1007/978-3-032-15764-5_50",
-    },
-    {
-      id: "pub-5",
-      category: "Conference" as const,
-      authors: "Miya, M. A., Mohona, M. H., Hossain, M. A., Shammo, M. B. A. Z., Islam, A., & Islam, L.",
-      title: "Remote Health Monitoring via PPG Signal Processing and Machine Learning Using Mobile Devices",
-      venue: "2025 28th International Conference on Computer and Information Technology (ICCIT), Cox's Bazar, Bangladesh",
-      dateOrYear: "December 2025",
-      doi: "10.1109/ICCIT68739.2025.11491546",
-      url: "https://doi.org/10.1109/ICCIT68739.2025.11491546",
-    },
-    {
-      id: "pub-6",
-      category: "Conference" as const,
-      authors: "Islam, L., Shammo, M. B. A. Z., Rashed, M., Hossain, M. I., Miya, M. A., & Mohona, M. H.",
-      title: "Machine Learning-Based Prediction of Nightmares in Children: A Pediatric Psychological Integration",
-      venue: "2025 IEEE Conference on Computing Applications and Systems (COMPAS), Kushtia, Bangladesh",
-      dateOrYear: "2025",
-      doi: "10.1109/COMPAS67506.2025.11381639",
-      url: "https://doi.org/10.1109/COMPAS67506.2025.11381639",
-    },
-    {
-      id: "pub-7",
-      category: "Submitted" as const,
-      authors: "Islam, L., et al.",
-      title: "Victim-Prior Frontier Allocation for Multi-Robot Search: Environment-Dependent Effects and a Geodesic Correction",
-      venue: "Submitted to IEEE ICCIT 2026",
-      dateOrYear: "2026",
-      note: "Under review at IEEE ICCIT 2026",
-    },
-    {
-      id: "pub-8",
-      category: "Preprint" as const,
-      authors: "Islam, L.",
-      title: "NDPAI: Neuroscience-Derived Predictive Active Inference for Calibrated Cross-Subject Wearable Stress Detection",
-      venue: "Research Square, 2026",
-      dateOrYear: "2026",
-      doi: "10.21203/rs.3.rs-10237429/v2",
-      url: "https://doi.org/10.21203/rs.3.rs-10237429/v2",
-    },
-    {
-      id: "pub-9",
-      category: "Preprint" as const,
-      authors: "Islam, L., et al.",
-      title: "Wound segmentation benchmark study (earlier version)",
-      venue: "Research Square, 2026",
-      dateOrYear: "2026",
-      doi: "10.21203/rs.3.rs-10362132/v1",
-      url: "https://doi.org/10.21203/rs.3.rs-10362132/v1",
-    },
-    {
-      id: "pub-10",
-      category: "Presentation" as const,
-      authors: "Islam, L., Shammo, M. B. A. Z., Rashed, M., Hossain, M. I., Mohona, M. H., & Miya, M. A.",
-      title: "Predicting Fear-Related Nightmares in Children Using Traditional Machine Learning Models",
-      venue: "2025 IEEE Computer Society Bangladesh Chapter Summer Symposium",
-      dateOrYear: "2025",
-    },
-  ],
-
-  experience: [
-    {
-      title: "ML Engineering Intern",
-      organization: "FlyRank AI",
-      location: "Chicago, USA (remote)",
-      period: "July 2026 - Present",
-      bullets: [
-        "Developing production machine learning models and data pipelines for applied AI applications.",
-        "Collaborating with an international engineering team on scalable inference and evaluation frameworks.",
-      ],
-    },
-    {
-      title: "Research Assistant",
-      organization: "Department of Information and Communication Engineering, PUST",
-      location: "Pabna, Bangladesh",
-      period: "2026 - Present",
-      supervisorOrMentor: "Supervisor: Dr. Md. Anwar Hossain",
-      bullets: [
-        "Conducted undergraduate thesis and follow-up research on competence-gated driver-state monitoring (NDPAI).",
-        "Prepared and submitted comprehensive journal manuscript to Elsevier's Engineering Applications of Artificial Intelligence (EAAI).",
-        "Built complete ROS 2 multi-node hardware-in-the-loop validation pipeline over live topics.",
-      ],
-    },
-    {
-      title: "Research Assistant",
-      organization: "Department of Information and Communication Engineering, PUST",
-      location: "Pabna, Bangladesh",
-      period: "2024 - March 2026",
-      supervisorOrMentor: "Mentor: Dr. Md. Imran Hossain",
-      bullets: [
-        "Took three research projects from initial concept formulation to peer-reviewed publication (IEEE COMPAS 2025, Springer BIM 2026, IEEE QPAIN 2026).",
-        "Conducted cross-disciplinary research bridging statistical data analysis and physical hardware (microcontrollers, custom sensor firmware, networked logging).",
-      ],
-    },
-  ],
-
-  education: [
-    {
-      degree: "B.Sc. in Information and Communication Engineering",
-      institution: "Pabna University of Science and Technology (PUST), Bangladesh",
-      period: "Session 2020-2021 | Graduated August 2026",
-      grade: "CGPA 3.34 / 4.00 (Final year 3.77; Final two years 3.64)",
-      details: "165 credits completed across 8 academic semesters.",
-      thesis: "Design and Evaluation of a Competence-Gated Driver-State Monitoring System for Autonomous Intervention Control (Defended: 2 September 2026, Supervisor: Dr. Md. Anwar Hossain)",
-    },
-    {
-      degree: "Higher Secondary Certificate (HSC)",
-      institution: "Board of Intermediate and Secondary Education, Bangladesh",
-      period: "Graduated with distinction",
-      grade: "GPA 5.00 / 5.00",
-      details: "Science Curriculum: Higher Mathematics, Physics, Chemistry, Biology.",
-    },
-    {
-      degree: "Secondary School Certificate (SSC)",
-      institution: "Board of Intermediate and Secondary Education, Bangladesh",
-      period: "Graduated with distinction",
-      grade: "GPA 5.00 / 5.00",
-      details: "Science Curriculum: Mathematics, Physics, Chemistry, Biology.",
-    },
-  ],
-
-  skills: [
-    {
-      category: "Programming",
-      skills: ["Python", "C", "R", "LaTeX"],
-    },
-    {
-      category: "Machine Learning",
-      skills: ["scikit-learn", "PyTorch", "TensorFlow", "XGBoost"],
-    },
-    {
-      category: "Reliable ML and Evaluation",
-      skills: [
-        "Expected Calibration Error",
-        "Reliability Diagrams",
-        "Temperature Scaling",
-        "Out-of-Distribution Detection",
-        "AUROC",
-        "Wilcoxon Signed-Rank Test",
-        "Holm-Bonferroni Correction",
-      ],
-    },
-    {
-      category: "Biomedical Signal Processing",
-      skills: [
-        "ECG and EDA Processing",
-        "HRV Feature Extraction",
-        "EDA Decomposition",
-        "PPG Analysis",
-        "WESAD Pipeline",
-        "MIT DriveDB Pipeline",
-      ],
-    },
-    {
-      category: "Computer Vision",
-      skills: ["Image Segmentation", "U-Net", "YOLO-based Object Detection"],
-    },
-    {
-      category: "Robotics",
-      skills: [
-        "ROS 2 Humble",
-        "Gazebo Fortress",
-        "MoveIt 2",
-        "RViz",
-        "SLAM",
-        "Multi-Robot Coordination",
-      ],
-    },
-    {
-      category: "Data and Dashboards",
-      skills: ["pandas", "NumPy", "SciPy", "Matplotlib", "Seaborn", "Streamlit"],
-    },
-    {
-      category: "Embedded Systems",
-      skills: [
-        "Arduino UNO",
-        "ESP8266",
-        "ESP32",
-        "AD8232 ECG",
-        "GSR Sensor",
-        "PN532 NFC",
-        "PIC16F877A",
-        "RFID",
-      ],
-    },
-    {
-      category: "Tools & OS",
-      skills: ["Git", "GitHub", "Linux (Ubuntu, WSL2)", "Jupyter", "MATLAB", "Proteus"],
-    },
-  ],
-
-  academicService: [
-    {
-      role: "Reviewer",
-      organization: "IEEE ICCIT 2026",
-      description: "Peer reviewer for technical papers in robotics, computing, and information technology.",
-    },
-    {
-      role: "Reviewer",
-      organization: "IEEE RAAICON 2026",
-      description: "Jashore University of Science and Technology, Bangladesh.",
-    },
-    {
-      role: "Reviewer",
-      organization: "IEEE RAAICON 2025",
-      description: "Military Institute of Science and Technology (MIST), Dhaka, Bangladesh.",
-    },
-    {
-      role: "Robotics Secretary",
-      organization: "ICE Association, PUST",
-      description: "October 2025 - Present. Organizing technical workshops, hands-on robotics bootcamps, and student mentorship.",
-    },
-    {
-      role: "Member",
-      organization: "Association for Computing Machinery (ACM)",
-      description: "Active member participating in professional computing seminars and academic initiatives.",
-    },
-    {
-      role: "Competitive Debater",
-      organization: "Inter-collegiate Debating Society",
-      description: "Participated in parliamentary and policy debate tournaments during early undergraduate years.",
-    },
-  ],
-
-  honorsAndCertifications: [
-    {
-      title: "PUST Conference and Travel Grant",
-      issuer: "Pabna University of Science and Technology",
-      description: "Awarded institutional grant support for presenting peer-reviewed research at recognized conferences.",
-    },
-    {
-      title: "Embedded System Research and Development",
-      issuer: "Daffodil International University (DIU)",
-      description: "Advanced hands-on program on microcontroller architecture, firmware engineering, and sensor integration.",
-    },
-    {
-      title: "Hands-on Robotics from Basics to Beyond",
-      issuer: "EMK Center",
-      description: "Intensive training in sensor fusion, kinematics, autonomous navigation, and robotic system integration.",
-    },
-    {
-      title: "Unlocking Research: From Concept to Publication",
-      issuer: "Solver Green",
-      description: "Rigorous academic writing, methodology formulation, and peer-review preparation workshop.",
-    },
-    {
-      title: "AI-Powered Communication",
-      issuer: "Grameenphone",
-      description: "Professional certification on enterprise AI tools, communication frameworks, and data storytelling.",
-    },
-  ],
-};
+// Export the statically imported JSON data with strong typing
+export const PORTFOLIO_DATA: PortfolioData = portfolioDataJson as PortfolioData;

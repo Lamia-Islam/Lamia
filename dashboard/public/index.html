@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lamia Islam — Portfolio CMS &amp; Static Site Manager</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout">
+    
+    <!-- Top Navigation Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="brand">
+          <span class="brand-title">Portfolio CMS</span>
+          <span class="brand-badge">Static SSG</span>
+        </div>
+        <div class="status-indicator" id="statusIndicator">
+          <span class="status-dot"></span>
+          <span class="status-text" id="statusText">Loaded from src/data/portfolio-data.json</span>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <a href="http://localhost:3001" target="_blank" class="btn btn-secondary btn-sm" id="btnViewLive">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          View Live Site
+        </a>
+
+        <input type="file" id="jsonFileInputTop" accept=".json" style="display:none">
+        <button type="button" class="btn btn-secondary btn-sm" id="btnPickJsonTop">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Pick JSON
+        </button>
+
+        <button type="button" class="btn btn-primary" id="btnPublish">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          <span>Save Changes</span>
+          <kbd class="shortcut-key">Ctrl+S</kbd>
+        </button>
+      </div>
+    </header>
+
+    <div class="body-container">
+      
+      <!-- Sidebar navigation -->
+      <aside class="sidebar">
+        <div class="sidebar-section-title">SECTIONS</div>
+        <nav class="nav-menu">
+          <button class="nav-item active" data-tab="tab-overview">
+            <span class="nav-icon">📊</span> Overview
+          </button>
+          <button class="nav-item" data-tab="tab-hero">
+            <span class="nav-icon">👤</span> Hero &amp; Profile
+          </button>
+          <button class="nav-item" data-tab="tab-stats">
+            <span class="nav-icon">🔢</span> Stats Strip
+          </button>
+          <button class="nav-item" data-tab="tab-about">
+            <span class="nav-icon">📖</span> About Me
+          </button>
+          <button class="nav-item" data-tab="tab-research">
+            <span class="nav-icon">🔬</span> Research Interests
+          </button>
+          <button class="nav-item" data-tab="tab-featured">
+            <span class="nav-icon">⭐</span> Featured Projects
+          </button>
+          <button class="nav-item" data-tab="tab-smaller">
+            <span class="nav-icon">📦</span> More Projects
+          </button>
+          <button class="nav-item" data-tab="tab-pubs">
+            <span class="nav-icon">📚</span> Publications
+          </button>
+          <button class="nav-item" data-tab="tab-exp">
+            <span class="nav-icon">💼</span> Experience
+          </button>
+          <button class="nav-item" data-tab="tab-edu">
+            <span class="nav-icon">🎓</span> Education
+          </button>
+          <button class="nav-item" data-tab="tab-skills">
+            <span class="nav-icon">⚡</span> Skills &amp; Methodologies
+          </button>
+          <button class="nav-item" data-tab="tab-service">
+            <span class="nav-icon">🤝</span> Academic Service
+          </button>
+          <button class="nav-item" data-tab="tab-honors">
+            <span class="nav-icon">🏆</span> Honors &amp; Certs
+          </button>
+          
+          <div class="sidebar-divider"></div>
+          <div class="sidebar-section-title">ADVANCED</div>
+          <button class="nav-item" data-tab="tab-raw">
+            <span class="nav-icon">{ }</span> Raw JSON Editor
+          </button>
+        </nav>
+
+
+      </aside>
+
+      <!-- Main content area with tab panes -->
+      <main class="main-content">
+        
+        <!-- Tab: Overview -->
+        <section class="tab-pane active" id="tab-overview">
+          <div class="pane-header">
+            <div>
+              <h2>Overview</h2>
+              <p class="subtitle">Update portfolio content in this dashboard and save directly to portfolio-data.json.</p>
+            </div>
+          </div>
+
+          <div class="grid-cards-2">
+            <div class="card">
+              <div class="card-header">
+                <h3>Live Status</h3>
+                <span class="badge badge-success">Static SSG Online</span>
+              </div>
+              <div class="card-body">
+                <div class="info-row">
+                  <span class="info-label">Live Site URL:</span>
+                  <a href="http://localhost:3001" target="_blank" class="info-value link">http://localhost:3001</a>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">JSON Source:</span>
+                  <code class="code-pill">src/data/portfolio-data.json</code>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Static Output:</span>
+                  <code class="code-pill">out/ (HTML/CSS/JS)</code>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Last Modified:</span>
+                  <span class="info-value" id="overviewLastMod">—</span>
+                </div>
+                <div class="pt-4">
+                  <button type="button" class="btn btn-primary btn-block" id="btnQuickPublish">
+                    💾 Save Changes to JSON
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3>JSON File Picker</h3>
+                <span class="badge badge-success">Import &amp; Export</span>
+              </div>
+              <div class="card-body">
+                <p class="text-muted text-sm mb-4">
+                  Select a local <code>.json</code> file to populate all portfolio sections automatically. You can review the data and click <strong>Save Changes</strong>.
+                </p>
+                <div class="flex-col gap-3">
+                  <input type="file" id="jsonFileInput" accept=".json" style="display:none">
+                  <button type="button" class="btn btn-secondary btn-block" id="btnPickJson">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    📁 Choose JSON File from Computer
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-block" id="btnDownloadJson">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    💾 Download Current JSON Backup
+                  </button>
+                  <div id="filePickerStatus" class="text-xs text-muted mt-1">No file chosen</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </section>
+
+        <!-- Tab: Hero & Profile -->
+        <section class="tab-pane" id="tab-hero">
+          <div class="pane-header">
+            <h2>Hero &amp; Profile Details</h2>
+            <p class="subtitle">Name, tagline, academic affiliations, contact info, and profile links.</p>
+          </div>
+          <div class="card">
+            <div class="card-body form-grid">
+              <div class="form-group col-span-2">
+                <label>Full Name</label>
+                <input type="text" id="prof_name" class="input" placeholder="Lamia Islam">
+              </div>
+
+              <div class="form-group col-span-2">
+                <label>Headline (Serif Subtitle)</label>
+                <textarea id="prof_headline" class="textarea" rows="2" placeholder="Machine learning researcher..."></textarea>
+              </div>
+
+              <div class="form-group col-span-2">
+                <label>Sub-line / Affiliation</label>
+                <textarea id="prof_subline" class="textarea" rows="2" placeholder="B.Sc. in ICE, PUST..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Location</label>
+                <input type="text" id="prof_location" class="input" placeholder="Bangladesh">
+              </div>
+
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="prof_email" class="input" placeholder="lamiaislamzy@gmail.com">
+              </div>
+
+              <div class="form-group col-span-2">
+                <label>CV PDF Path</label>
+                <input type="text" id="prof_cvPath" class="input" placeholder="/cv.pdf">
+                <span class="help-text">Place real PDF in <code>public/cv.pdf</code> to match this path.</span>
+              </div>
+
+              <div class="form-group col-span-2">
+                <label>Contact Callout Note</label>
+                <textarea id="prof_contactNote" class="textarea" rows="2"></textarea>
+              </div>
+
+              <div class="col-span-2 section-subhead">Social &amp; Academic Profiles</div>
+
+              <div class="form-group">
+                <label>Google Scholar URL</label>
+                <input type="url" id="prof_scholar" class="input">
+              </div>
+
+              <div class="form-group">
+                <label>GitHub Profile URL</label>
+                <input type="url" id="prof_github" class="input">
+              </div>
+
+              <div class="form-group">
+                <label>LinkedIn Profile URL</label>
+                <input type="url" id="prof_linkedin" class="input">
+              </div>
+
+              <div class="form-group">
+                <label>ResearchGate Profile URL</label>
+                <input type="url" id="prof_researchgate" class="input">
+              </div>
+
+              <div class="form-group col-span-2">
+                <label>ORCID Profile URL</label>
+                <input type="url" id="prof_orcid" class="input">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: Stats Strip -->
+        <section class="tab-pane" id="tab-stats">
+          <div class="pane-header">
+            <h2>Stats Strip (4 Numbers)</h2>
+            <p class="subtitle">The high-impact numbers displayed directly below the Hero section.</p>
+          </div>
+          <div class="card">
+            <div class="card-body" id="statsContainer">
+              <!-- Dynamically populated stats items -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: About Me -->
+        <section class="tab-pane" id="tab-about">
+          <!-- List View -->
+          <div id="aboutListView">
+            <div class="pane-header">
+              <h2>About Me Narrative</h2>
+              <p class="subtitle">The opening research question and the core bio paragraphs.</p>
+            </div>
+            <div class="card">
+              <div class="card-body space-y-4">
+                <div class="form-group">
+                  <label>Opening Research Question (Featured Quote)</label>
+                  <input type="text" id="about_openingQuestion" class="input font-serif">
+                </div>
+
+                <div class="section-subhead">Bio Paragraphs</div>
+                <div id="aboutParagraphsContainer" class="space-y-3">
+                  <!-- Dynamically populated paragraphs -->
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" id="btnAddParagraph">+ Add Paragraph</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Separate Add View -->
+          <div id="aboutAddView" style="display:none;">
+            <div class="pane-header">
+              <button type="button" class="btn btn-secondary btn-sm mb-3 btn-back-to-list" data-section="about">&larr; Back to About Me</button>
+              <h2>Add New Bio Paragraph</h2>
+              <p class="subtitle">Write a new narrative bio paragraph to append to your About Me section.</p>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <div class="form-group">
+                  <label>Bio Paragraph Text *</label>
+                  <textarea id="new_about_text" class="textarea" rows="5" placeholder="Enter paragraph content..."></textarea>
+                </div>
+              </div>
+              <div class="card-footer flex-between">
+                <button type="button" class="btn btn-secondary btn-cancel-add" data-section="about">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnSaveNewParagraph">Save Paragraph</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: Research Interests -->
+        <section class="tab-pane" id="tab-research">
+          <!-- List View -->
+          <div id="researchListView">
+            <div class="pane-header flex-between">
+              <div>
+                <h2>Research Interests</h2>
+                <p class="subtitle">5 focus areas with summaries and methodology tags.</p>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnAddInterest">+ Add Research Area</button>
+            </div>
+            <div id="researchInterestsContainer" class="space-y-4">
+              <!-- Dynamically populated research cards -->
+            </div>
+          </div>
+
+          <!-- Separate Add View -->
+          <div id="researchAddView" style="display:none;">
+            <div class="pane-header">
+              <button type="button" class="btn btn-secondary btn-sm mb-3 btn-back-to-list" data-section="research">&larr; Back to Research Interests</button>
+              <h2>Add New Research Focus Area</h2>
+              <p class="subtitle">Enter the research focus details below.</p>
+            </div>
+            <div class="card">
+              <div class="card-body space-y-4">
+                <div class="form-group">
+                  <label>Focus Area Title *</label>
+                  <input type="text" id="new_res_title" class="input" placeholder="e.g. Uncertainty, Calibration & Out-of-Distribution Detection">
+                </div>
+                <div class="form-group">
+                  <label>Summary Description *</label>
+                  <textarea id="new_res_summary" class="textarea" rows="3" placeholder="Summary of what you investigate in this area"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>Methodology Tags (comma-separated)</label>
+                  <input type="text" id="new_res_tags" class="input" placeholder="OOD Detection, Calibration, Safety-Critical AI">
+                </div>
+              </div>
+              <div class="card-footer flex-between">
+                <button type="button" class="btn btn-secondary btn-cancel-add" data-section="research">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnSaveNewResearch">Save Research Area</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: Featured Projects -->
+        <section class="tab-pane" id="tab-featured">
+          <!-- List View -->
+          <div id="featuredListView">
+            <div class="pane-header flex-between">
+              <div>
+                <h2>Featured Projects (Core Research)</h2>
+                <p class="subtitle">The 4 primary project cards and their dedicated detail pages.</p>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnAddFeaturedProject">+ Add Featured Project</button>
+            </div>
+            <div id="featuredProjectsContainer" class="space-y-6">
+              <!-- Dynamically populated featured projects -->
+            </div>
+          </div>
+
+          <!-- Separate Add View -->
+          <div id="featuredAddView" style="display:none;">
+            <div class="pane-header">
+              <button type="button" class="btn btn-secondary btn-sm mb-3 btn-back-to-list" data-section="featured">&larr; Back to Featured Projects</button>
+              <h2>Add New Featured Project</h2>
+              <p class="subtitle">Enter full project details for the showcase card and dedicated detail page.</p>
+            </div>
+            <div class="card">
+              <div class="card-body form-grid">
+                <div class="form-group">
+                  <label>Project Slug (URL Identifier) *</label>
+                  <input type="text" id="new_fp_slug" class="input" placeholder="e.g. my-robot-system">
+                  <span class="help-text">Used for URL: <code>/projects/[slug]</code></span>
+                </div>
+                <div class="form-group">
+                  <label>Year</label>
+                  <input type="text" id="new_fp_year" class="input" placeholder="e.g. 2026">
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Full Project Title *</label>
+                  <input type="text" id="new_fp_title" class="input" placeholder="Full title of the research project">
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Short Title (Card Heading)</label>
+                  <input type="text" id="new_fp_shortTitle" class="input" placeholder="Short name for overview card">
+                </div>
+                <div class="form-group col-span-2">
+                  <label>One-Line Summary *</label>
+                  <textarea id="new_fp_summary" class="textarea" rows="2" placeholder="Concise overview of what this project achieves"></textarea>
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Problem Statement</label>
+                  <textarea id="new_fp_problem" class="textarea" rows="3" placeholder="What challenge or gap does this project solve?"></textarea>
+                </div>
+                <div class="form-group col-span-2">
+                  <label>What I Built (One bullet per line)</label>
+                  <textarea id="new_fp_whatBuilt" class="textarea" rows="4" placeholder="Full ROS 2 simulation system...&#10;Probabilistic classifier on ECG/EDA..."></textarea>
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Key Results (One bullet per line)</label>
+                  <textarea id="new_fp_keyResults" class="textarea" rows="3" placeholder="AUROC reached 0.966 vs 0.422 baseline..."></textarea>
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Tech Tags (Comma-separated)</label>
+                  <input type="text" id="new_fp_techTags" class="input" placeholder="Python, ROS 2 Humble, Gazebo Fortress, PyTorch">
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Figure Caption</label>
+                  <input type="text" id="new_fp_caption" class="input" placeholder="Description of architecture diagram for the detail page">
+                </div>
+              </div>
+              <div class="card-footer flex-between">
+                <button type="button" class="btn btn-secondary btn-cancel-add" data-section="featured">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnSaveNewFeaturedProject">Save Featured Project</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: More Projects -->
+        <section class="tab-pane" id="tab-smaller">
+          <!-- List View -->
+          <div id="smallerListView">
+            <div class="pane-header flex-between">
+              <div>
+                <h2>More Projects &amp; Prototypes</h2>
+                <p class="subtitle">The compact 6-card row for embedded hardware and ML applications.</p>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnAddSmallerProject">+ Add Project</button>
+            </div>
+            <div id="smallerProjectsContainer" class="space-y-4">
+              <!-- Dynamically populated smaller projects -->
+            </div>
+          </div>
+
+          <!-- Separate Add View -->
+          <div id="smallerAddView" style="display:none;">
+            <div class="pane-header">
+              <button type="button" class="btn btn-secondary btn-sm mb-3 btn-back-to-list" data-section="smaller">&larr; Back to More Projects</button>
+              <h2>Add New Project / Prototype</h2>
+              <p class="subtitle">Enter the prototype or software application details below.</p>
+            </div>
+            <div class="card">
+              <div class="card-body space-y-4">
+                <div class="form-group">
+                  <label>Project / Prototype Title *</label>
+                  <input type="text" id="new_sp_title" class="input" placeholder="e.g. Smart Wearable Health Device">
+                </div>
+                <div class="form-group">
+                  <label>Description *</label>
+                  <textarea id="new_sp_desc" class="textarea" rows="3" placeholder="Brief summary of hardware/software prototype and findings"></textarea>
+                </div>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label>Publication Venue (Optional)</label>
+                    <input type="text" id="new_sp_pub" class="input" placeholder="e.g. IEEE ICCIT 2026">
+                  </div>
+                  <div class="form-group">
+                    <label>DOI Link (Optional)</label>
+                    <input type="url" id="new_sp_doi" class="input" placeholder="https://doi.org/...">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Tech Tags (Comma-separated)</label>
+                  <input type="text" id="new_sp_tags" class="input" placeholder="ESP32, MAX30102, BLE, Python">
+                </div>
+              </div>
+              <div class="card-footer flex-between">
+                <button type="button" class="btn btn-secondary btn-cancel-add" data-section="smaller">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnSaveNewSmallerProject">Save Project</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: Publications -->
+        <section class="tab-pane" id="tab-pubs">
+          <!-- List View -->
+          <div id="pubsListView">
+            <div class="pane-header flex-between">
+              <div>
+                <h2>Publications &amp; Scholarly Output</h2>
+                <p class="subtitle">All peer-reviewed papers, journal under-reviews, preprints, and presentations.</p>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnAddPublication">+ Add Publication</button>
+            </div>
+            <div id="publicationsContainer" class="space-y-4">
+              <!-- Dynamically populated publications -->
+            </div>
+          </div>
+
+          <!-- Separate Add View -->
+          <div id="pubsAddView" style="display:none;">
+            <div class="pane-header">
+              <button type="button" class="btn btn-secondary btn-sm mb-3 btn-back-to-list" data-section="pubs">&larr; Back to Publications</button>
+              <h2>Add New Publication</h2>
+              <p class="subtitle">Enter the scholarly publication details below and save to update portfolio-data.json.</p>
+            </div>
+            <div class="card">
+              <div class="card-body form-grid">
+                <div class="form-group">
+                  <label>Category</label>
+                  <select class="select" id="new_pub_category">
+                    <option value="Conference">Conference Paper</option>
+                    <option value="Journal">Journal (Under Review)</option>
+                    <option value="Submitted">Submitted Paper</option>
+                    <option value="Preprint">Preprint</option>
+                    <option value="Presentation">Presentation</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Year or Date</label>
+                  <input type="text" class="input" id="new_pub_dateOrYear" placeholder="2026">
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Paper Title *</label>
+                  <input type="text" class="input" id="new_pub_title" placeholder="Full scholarly title of the paper">
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Authors List (Lamia Islam will be highlighted in bold)</label>
+                  <input type="text" class="input" id="new_pub_authors" placeholder="e.g. Islam, L., Hossain, M. A., ...">
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Venue (Journal / Conference name)</label>
+                  <input type="text" class="input" id="new_pub_venue" placeholder="e.g. IEEE ICCIT 2026">
+                </div>
+                <div class="form-group">
+                  <label>DOI (Optional)</label>
+                  <input type="text" class="input" id="new_pub_doi" placeholder="e.g. 10.1109/...">
+                </div>
+                <div class="form-group">
+                  <label>Article URL (Optional)</label>
+                  <input type="url" class="input" id="new_pub_url" placeholder="https://...">
+                </div>
+              </div>
+              <div class="card-footer flex-between">
+                <button type="button" class="btn btn-secondary btn-cancel-add" data-section="pubs">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnSaveNewPublication">Save Publication</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: Experience -->
+        <section class="tab-pane" id="tab-exp">
+          <!-- List View -->
+          <div id="expListView">
+            <div class="pane-header flex-between">
+              <div>
+                <h2>Research &amp; Industry Experience</h2>
+                <p class="subtitle">Roles, institutions, dates, mentors, and achievements.</p>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnAddExperience">+ Add Experience</button>
+            </div>
+            <div id="experienceContainer" class="space-y-4">
+              <!-- Dynamically populated experience -->
+            </div>
+          </div>
+
+          <!-- Separate Add View -->
+          <div id="expAddView" style="display:none;">
+            <div class="pane-header">
+              <button type="button" class="btn btn-secondary btn-sm mb-3 btn-back-to-list" data-section="exp">&larr; Back to Experience</button>
+              <h2>Add New Research / Industry Experience</h2>
+              <p class="subtitle">Enter role details and accomplishment bullets below.</p>
+            </div>
+            <div class="card">
+              <div class="card-body form-grid">
+                <div class="form-group">
+                  <label>Role Title *</label>
+                  <input type="text" id="new_exp_title" class="input" placeholder="e.g. Machine Learning Engineering Intern">
+                </div>
+                <div class="form-group">
+                  <label>Organization / Company *</label>
+                  <input type="text" id="new_exp_org" class="input" placeholder="e.g. FlyRank AI">
+                </div>
+                <div class="form-group">
+                  <label>Period</label>
+                  <input type="text" id="new_exp_period" class="input" placeholder="e.g. Jun 2026 – Present">
+                </div>
+                <div class="form-group">
+                  <label>Location</label>
+                  <input type="text" id="new_exp_loc" class="input" placeholder="e.g. Remote / Dhaka, Bangladesh">
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Supervisor / Mentor (Optional)</label>
+                  <input type="text" id="new_exp_sup" class="input" placeholder="e.g. Dr. Md. Anwar Hossain">
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Accomplishment Bullets (One per line) *</label>
+                  <textarea id="new_exp_bullets" class="textarea" rows="4" placeholder="Engineered real-time biosignal ingestion pipeline...&#10;Reduced latency by 45% using optimized C++ bindings..."></textarea>
+                </div>
+              </div>
+              <div class="card-footer flex-between">
+                <button type="button" class="btn btn-secondary btn-cancel-add" data-section="exp">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnSaveNewExperience">Save Experience</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: Education -->
+        <section class="tab-pane" id="tab-edu">
+          <!-- List View -->
+          <div id="eduListView">
+            <div class="pane-header flex-between">
+              <div>
+                <h2>Education</h2>
+                <p class="subtitle">Academic degrees, universities, GPAs, and thesis details.</p>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnAddEducation">+ Add Degree</button>
+            </div>
+            <div id="educationContainer" class="space-y-4">
+              <!-- Dynamically populated education -->
+            </div>
+          </div>
+
+          <!-- Separate Add View -->
+          <div id="eduAddView" style="display:none;">
+            <div class="pane-header">
+              <button type="button" class="btn btn-secondary btn-sm mb-3 btn-back-to-list" data-section="edu">&larr; Back to Education</button>
+              <h2>Add New Academic Degree</h2>
+              <p class="subtitle">Enter academic degree, institution, and thesis details below.</p>
+            </div>
+            <div class="card">
+              <div class="card-body form-grid">
+                <div class="form-group col-span-2">
+                  <label>Degree Title *</label>
+                  <input type="text" id="new_edu_deg" class="input" placeholder="e.g. B.Sc. in Information and Communication Engineering">
+                </div>
+                <div class="form-group">
+                  <label>Institution *</label>
+                  <input type="text" id="new_edu_inst" class="input" placeholder="e.g. Pabna University of Science and Technology (PUST)">
+                </div>
+                <div class="form-group">
+                  <label>Period</label>
+                  <input type="text" id="new_edu_per" class="input" placeholder="e.g. 2021 – 2026">
+                </div>
+                <div class="form-group">
+                  <label>Grade / CGPA</label>
+                  <input type="text" id="new_edu_grd" class="input" placeholder="e.g. CGPA: 3.82 / 4.00 (Rank: 2nd)">
+                </div>
+                <div class="form-group">
+                  <label>Details / Honors (Optional)</label>
+                  <input type="text" id="new_edu_det" class="input" placeholder="e.g. Dean's Honor List for Academic Excellence">
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Thesis Note / Title (Optional)</label>
+                  <textarea id="new_edu_the" class="textarea" rows="2" placeholder="Undergraduate Thesis: Design and Evaluation of a Competence-Gated Driver-State Monitoring System"></textarea>
+                </div>
+              </div>
+              <div class="card-footer flex-between">
+                <button type="button" class="btn btn-secondary btn-cancel-add" data-section="edu">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnSaveNewEducation">Save Degree</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: Skills -->
+        <section class="tab-pane" id="tab-skills">
+          <!-- List View -->
+          <div id="skillsListView">
+            <div class="pane-header flex-between">
+              <div>
+                <h2>Skills &amp; Methodologies</h2>
+                <p class="subtitle">Grouped tag chips across 9 technical competencies (no progress bars).</p>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnAddSkillGroup">+ Add Skill Category</button>
+            </div>
+            <div id="skillsContainer" class="space-y-4">
+              <!-- Dynamically populated skills -->
+            </div>
+          </div>
+
+          <!-- Separate Add View -->
+          <div id="skillsAddView" style="display:none;">
+            <div class="pane-header">
+              <button type="button" class="btn btn-secondary btn-sm mb-3 btn-back-to-list" data-section="skills">&larr; Back to Skills</button>
+              <h2>Add New Skill Category</h2>
+              <p class="subtitle">Enter category name and comma-separated skill tag chips.</p>
+            </div>
+            <div class="card">
+              <div class="card-body form-grid">
+                <div class="form-group">
+                  <label>Skill Category Name *</label>
+                  <input type="text" id="new_sk_cat" class="input" placeholder="e.g. Robotics & Simulation">
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Skills (Comma-separated chips) *</label>
+                  <input type="text" id="new_sk_list" class="input" placeholder="e.g. ROS 2 Humble, Gazebo Fortress, Nav2, URDF, TF2, Micro-ROS">
+                  <span class="help-text">Will be displayed as clean tag chips without progress bars.</span>
+                </div>
+              </div>
+              <div class="card-footer flex-between">
+                <button type="button" class="btn btn-secondary btn-cancel-add" data-section="skills">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnSaveNewSkillGroup">Save Skill Category</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: Academic Service -->
+        <section class="tab-pane" id="tab-service">
+          <!-- List View -->
+          <div id="serviceListView">
+            <div class="pane-header flex-between">
+              <div>
+                <h2>Academic Service &amp; Leadership</h2>
+                <p class="subtitle">Peer review duties, society secretary roles, and memberships.</p>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnAddService">+ Add Service Item</button>
+            </div>
+            <div id="serviceContainer" class="space-y-4">
+              <!-- Dynamically populated service items -->
+            </div>
+          </div>
+
+          <!-- Separate Add View -->
+          <div id="serviceAddView" style="display:none;">
+            <div class="pane-header">
+              <button type="button" class="btn btn-secondary btn-sm mb-3 btn-back-to-list" data-section="service">&larr; Back to Academic Service</button>
+              <h2>Add New Academic Service Item</h2>
+              <p class="subtitle">Enter role, organization, and service description below.</p>
+            </div>
+            <div class="card">
+              <div class="card-body form-grid">
+                <div class="form-group">
+                  <label>Role Title *</label>
+                  <input type="text" id="new_srv_role" class="input" placeholder="e.g. Peer Reviewer or Secretary">
+                </div>
+                <div class="form-group">
+                  <label>Organization / Conference *</label>
+                  <input type="text" id="new_srv_org" class="input" placeholder="e.g. IEEE ICCIT 2026 / IEEE Student Branch">
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Description *</label>
+                  <textarea id="new_srv_desc" class="textarea" rows="3" placeholder="Description of service contribution or reviewed topics"></textarea>
+                </div>
+              </div>
+              <div class="card-footer flex-between">
+                <button type="button" class="btn btn-secondary btn-cancel-add" data-section="service">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnSaveNewService">Save Service Item</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: Honors & Certifications -->
+        <section class="tab-pane" id="tab-honors">
+          <!-- List View -->
+          <div id="honorsListView">
+            <div class="pane-header flex-between">
+              <div>
+                <h2>Honors, Training &amp; Certifications</h2>
+                <p class="subtitle">Travel grants, robotics bootcamps, and professional certificates.</p>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnAddHonor">+ Add Honor / Cert</button>
+            </div>
+            <div id="honorsContainer" class="space-y-4">
+              <!-- Dynamically populated honors -->
+            </div>
+          </div>
+
+          <!-- Separate Add View -->
+          <div id="honorsAddView" style="display:none;">
+            <div class="pane-header">
+              <button type="button" class="btn btn-secondary btn-sm mb-3 btn-back-to-list" data-section="honors">&larr; Back to Honors &amp; Certifications</button>
+              <h2>Add New Honor or Certification</h2>
+              <p class="subtitle">Enter honor or award details below.</p>
+            </div>
+            <div class="card">
+              <div class="card-body form-grid">
+                <div class="form-group">
+                  <label>Honor / Award / Certification Title *</label>
+                  <input type="text" id="new_hon_title" class="input" placeholder="e.g. IEEE Student Travel Grant Award">
+                </div>
+                <div class="form-group">
+                  <label>Issuer / Conferring Body *</label>
+                  <input type="text" id="new_hon_iss" class="input" placeholder="e.g. IEEE Bangladesh Section">
+                </div>
+                <div class="form-group col-span-2">
+                  <label>Description *</label>
+                  <textarea id="new_hon_desc" class="textarea" rows="3" placeholder="Brief note on criteria, competition rank, or scope"></textarea>
+                </div>
+              </div>
+              <div class="card-footer flex-between">
+                <button type="button" class="btn btn-secondary btn-cancel-add" data-section="honors">Cancel</button>
+                <button type="button" class="btn btn-primary" id="btnSaveNewHonor">Save Honor</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab: Raw JSON Editor -->
+        <section class="tab-pane" id="tab-raw">
+          <div class="pane-header flex-between">
+            <div>
+              <h2>Raw JSON Editor</h2>
+              <p class="subtitle">Directly edit, format, or validate the complete <code>portfolio-data.json</code> file.</p>
+            </div>
+            <div class="flex gap-2">
+              <button type="button" class="btn btn-secondary btn-sm" id="btnFormatJson">Format JSON</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnValidateJson">Validate</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body p-0">
+              <textarea id="rawJsonTextarea" class="raw-json-editor" spellcheck="false"></textarea>
+            </div>
+            <div class="card-footer flex-between">
+              <span class="text-xs text-muted" id="jsonValidationMsg">Valid JSON</span>
+              <button type="button" class="btn btn-primary btn-sm" id="btnSaveRaw">Save JSON</button>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
