@@ -87,58 +87,35 @@
             </div>
           </div>
 
-          <div class="grid-cards-2">
-            <div class="card">
-              <div class="card-header">
-                <h3>Live Status</h3>
-                <span class="badge badge-success">Static SSG Online</span>
-              </div>
-              <div class="card-body">
-                <div class="info-row">
-                  <span class="info-label">Live Site URL:</span>
-                  <a href="http://localhost:3000" target="_blank" class="info-value link">http://localhost:3000</a>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">JSON Source:</span>
-                  <code class="code-pill">src/data/portfolio-data.json</code>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Static Output:</span>
-                  <code class="code-pill">out/ (HTML/CSS/JS)</code>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Last Modified:</span>
-                  <span class="info-value" id="overviewLastMod">—</span>
-                </div>
-                <div class="pt-4">
-                  <button type="button" class="btn btn-primary btn-block" id="btnQuickPublish">
-                    💾 Save Changes to JSON
-                  </button>
-                </div>
-              </div>
+          <div class="card" style="max-width: 680px;">
+            <div class="card-header">
+              <h3>JSON File Management</h3>
+              <span class="badge badge-success">Active</span>
             </div>
-
-            <div class="card">
-              <div class="card-header">
-                <h3>JSON File Management</h3>
-                <span class="badge badge-success">Import &amp; Export</span>
+            <div class="card-body">
+              <div class="info-row mb-4">
+                <span class="info-label">JSON Source:</span>
+                <code class="code-pill">src/data/portfolio-data.json</code>
               </div>
-              <div class="card-body">
-                <p class="text-muted text-sm mb-4">
-                  Select a local <code>portfolio-data.json</code> file to populate all sections automatically, or download a backup copy.
-                </p>
-                <div class="flex-col gap-3">
-                  <input type="file" id="jsonFileInput" accept=".json" style="display:none">
-                  <button type="button" class="btn btn-secondary btn-block" id="btnPickJson">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                    📁 Import JSON File
-                  </button>
-                  <button type="button" class="btn btn-secondary btn-block" id="btnDownloadJson">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    💾 Export / Download Backup JSON
-                  </button>
-                  <div id="filePickerStatus" class="text-xs text-muted mt-1">No file chosen</div>
-                </div>
+              <p class="text-muted text-sm mb-4">
+                Select a local <code>portfolio-data.json</code> file to populate all sections automatically, or download a backup copy.
+              </p>
+              <div class="flex-col gap-3">
+                <input type="file" id="jsonFileInput" accept=".json" style="display:none">
+                <button type="button" class="btn btn-secondary btn-block" id="btnPickJson">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  📁 Import JSON File
+                </button>
+                <button type="button" class="btn btn-secondary btn-block" id="btnDownloadJson">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  💾 Export / Download Backup JSON
+                </button>
+                <div id="filePickerStatus" class="text-xs text-muted mt-1">No file chosen</div>
+              </div>
+              <div class="pt-4">
+                <button type="button" class="btn btn-primary btn-block" id="btnQuickPublish">
+                  💾 Save Changes to JSON
+                </button>
               </div>
             </div>
           </div>

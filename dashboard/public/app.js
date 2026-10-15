@@ -12,7 +12,6 @@ const btnPickJson = document.getElementById('btnPickJson');
 const btnPickJsonTop = document.getElementById('btnPickJsonTop');
 const btnDownloadJson = document.getElementById('btnDownloadJson');
 const filePickerStatus = document.getElementById('filePickerStatus');
-const overviewLastMod = document.getElementById('overviewLastMod');
 const statusText = document.getElementById('statusText');
 const toastContainer = document.getElementById('toastContainer');
 
@@ -51,9 +50,6 @@ async function loadPortfolioData() {
     const json = await res.json();
     currentData = json.data;
 
-    if (json.lastModified) {
-      overviewLastMod.textContent = new Date(json.lastModified).toLocaleString();
-    }
     statusText.textContent = 'Connected to portfolio-data.json';
 
     populateAllForms();
@@ -629,11 +625,6 @@ async function savePortfolioData() {
     if (!res.ok) {
       const err = await res.json();
       throw new Error(err.error || `HTTP ${res.status}`);
-    }
-
-    const json = await res.json();
-    if (json.lastModified) {
-      overviewLastMod.textContent = new Date(json.lastModified).toLocaleString();
     }
 
     statusText.textContent = 'Changes saved successfully';
