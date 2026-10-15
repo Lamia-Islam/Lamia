@@ -212,7 +212,7 @@ const server = http.createServer(async (req, res) => {
       status: 'online',
       jsonPath: JSON_PATH,
       lastModified,
-      liveUrl: 'http://localhost:3001',
+      liveUrl: 'http://localhost:3000',
     });
   }
 
@@ -260,7 +260,7 @@ server.listen(PORT, () => {
   console.log(`\n======================================================`);
   console.log(`🚀 Portfolio Management Dashboard Server is running!`);
   console.log(`Dashboard URL:   http://localhost:${PORT}`);
-  console.log(`Live Site URL:   http://localhost:3001`);
+  console.log(`Live Site URL:   http://localhost:3000`);
   console.log(`Target JSON:     ${JSON_PATH}`);
   console.log(`======================================================\n`);
 });

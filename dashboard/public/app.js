@@ -1,4 +1,4 @@
-// Global state
+// Global CMS State
 let currentData = null;
 
 // DOM Elements
@@ -17,14 +17,12 @@ const btnFormatJson = document.getElementById('btnFormatJson');
 const btnValidateJson = document.getElementById('btnValidateJson');
 const rawJsonTextarea = document.getElementById('rawJsonTextarea');
 const jsonValidationMsg = document.getElementById('jsonValidationMsg');
-const buildOutput = document.getElementById('buildOutput');
-const buildTimeTag = document.getElementById('buildTimeTag');
 const overviewLastMod = document.getElementById('overviewLastMod');
 const statusText = document.getElementById('statusText');
 const toastContainer = document.getElementById('toastContainer');
 
-// Show toast notification
-function showToast(message, type = 'success', duration = 4000) {
+// Toast Notification
+function showToast(message, type = 'success', duration = 3500) {
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
   toast.innerHTML = `
@@ -34,34 +32,6 @@ function showToast(message, type = 'success', duration = 4000) {
   toast.querySelector('button').onclick = () => toast.remove();
   toastContainer.appendChild(toast);
   setTimeout(() => toast.remove(), duration);
-}
-
-// Separate Add Form View Helpers
-const ALL_SECTIONS = ['about', 'research', 'featured', 'smaller', 'pubs', 'exp', 'edu', 'skills', 'service', 'honors'];
-
-function showAddForm(section) {
-  const listView = document.getElementById(`${section}ListView`);
-  const addView = document.getElementById(`${section}AddView`);
-  if (listView) listView.style.display = 'none';
-  if (addView) {
-    addView.style.display = 'block';
-    // Clear inputs inside add view
-    addView.querySelectorAll('input:not([type=button]), textarea').forEach(i => i.value = '');
-    // Focus first input
-    const firstInput = addView.querySelector('input, textarea, select');
-    if (firstInput) setTimeout(() => firstInput.focus(), 50);
-  }
-}
-
-function hideAddForm(section) {
-  const listView = document.getElementById(`${section}ListView`);
-  const addView = document.getElementById(`${section}AddView`);
-  if (addView) addView.style.display = 'none';
-  if (listView) listView.style.display = 'block';
-}
-
-function closeAllAddForms() {
-  ALL_SECTIONS.forEach(sec => hideAddForm(sec));
 }
 
 // Tab navigation
@@ -75,10 +45,7 @@ navItems.forEach(item => {
     const pane = document.getElementById(targetTab);
     if (pane) pane.classList.add('active');
 
-    // Return to list view whenever switching tabs
-    closeAllAddForms();
-
-    // If switching to raw JSON tab, update textarea with current form state
+    // If switching to raw JSON tab, update textarea with current state
     if (targetTab === 'tab-raw') {
       collectFormData();
       rawJsonTextarea.value = JSON.stringify(currentData, null, 2);
@@ -111,7 +78,7 @@ async function loadPortfolioData() {
 function populateAllForms() {
   if (!currentData) return;
 
-  // 1. Hero & Profile
+  // 1. Profile
   const p = currentData.profile || {};
   document.getElementById('prof_name').value = p.name || '';
   document.getElementById('prof_headline').value = p.headline || '';
@@ -125,461 +92,432 @@ function populateAllForms() {
   document.getElementById('prof_scholar').value = s.scholar || '';
   document.getElementById('prof_github').value = s.github || '';
   document.getElementById('prof_linkedin').value = s.linkedin || '';
-  document.getElementById('prof_researchgate').value = s.researchgate || '';
   document.getElementById('prof_orcid').value = s.orcid || '';
 
-  // 2. Stats
-  renderStats();
-
-  // 3. About
+  // 2. About
   renderAbout();
 
-  // 4. Research Interests
-  renderResearchInterests();
+  // 3. News
+  renderNews();
 
-  // 5. Featured Projects
+  // 4. Featured Projects
   renderFeaturedProjects();
 
-  // 6. Smaller Projects
-  renderSmallerProjects();
-
-  // 7. Publications
+  // 5. Publications
   renderPublications();
 
-  // 8. Experience
-  renderExperience();
-
-  // 9. Education
-  renderEducation();
-
-  // 10. Skills
-  renderSkills();
-
-  // 11. Academic Service
-  renderService();
-
-  // 12. Honors
-  renderHonors();
+  // 6. Experience & Education
+  renderExpEduService();
 
   // Raw JSON
   rawJsonTextarea.value = JSON.stringify(currentData, null, 2);
 }
 
-// RENDER HELPERS
+// --- RENDER HELPERS ---
 
-function renderStats() {
-  const container = document.getElementById('statsContainer');
+// About
+function renderAbout() {
+  const ab = currentData.about || {};
+  document.getElementById('about_lede').value = ab.lede || '';
+
+  const container = document.getElementById('aboutParagraphsContainer');
   container.innerHTML = '';
-  const stats = currentData.stats || [];
+  const paras = ab.paragraphs || [];
 
-  stats.forEach((st, idx) => {
+  paras.forEach((para, idx) => {
+    const row = document.createElement('div');
+    row.className = 'item-card flex-between gap-3';
+    row.innerHTML = `
+      <div style="flex:1">
+        <label class="text-xs text-muted mb-1 block">Paragraph #${idx + 1}</label>
+        <textarea class="textarea about-para" rows="3">${para}</textarea>
+      </div>
+      <button type="button" class="btn btn-danger btn-sm btn-del-para" data-idx="${idx}" style="align-self:flex-start;margin-top:20px">&times;</button>
+    `;
+    container.appendChild(row);
+  });
+
+  container.querySelectorAll('.btn-del-para').forEach(btn => {
+    btn.onclick = () => {
+      const idx = parseInt(btn.getAttribute('data-idx'), 10);
+      currentData.about.paragraphs.splice(idx, 1);
+      renderAbout();
+    };
+  });
+}
+
+document.getElementById('btnAddParagraph').onclick = () => {
+  if (!currentData.about) currentData.about = {};
+  if (!currentData.about.paragraphs) currentData.about.paragraphs = [];
+  currentData.about.paragraphs.push('New paragraph description...');
+  renderAbout();
+};
+
+// News
+function renderNews() {
+  const container = document.getElementById('newsContainer');
+  container.innerHTML = '';
+  const news = currentData.news || [];
+
+  news.forEach((item, idx) => {
     const div = document.createElement('div');
     div.className = 'item-card';
     div.innerHTML = `
-      <div class="item-card-header">
-        <span class="item-card-title">Stat #${idx + 1}</span>
+      <div class="item-card-header flex-between">
+        <span class="item-card-title">News #${idx + 1} — ${item.date || 'New Entry'}</span>
+        <button type="button" class="btn btn-danger btn-xs btn-del-news" data-idx="${idx}">Delete</button>
       </div>
       <div class="form-grid">
         <div class="form-group">
-          <label>Big Metric Value (e.g. 4, 0.966)</label>
-          <input type="text" class="input stat-val" value="${st.value || ''}">
+          <label>Display Date (e.g. Sep 2026)</label>
+          <input type="text" class="input news-date" value="${item.date || ''}">
         </div>
         <div class="form-group">
-          <label>Label</label>
-          <input type="text" class="input stat-lbl" value="${st.label || ''}">
+          <label>HTML datetime (e.g. 2026-09)</label>
+          <input type="text" class="input news-datetime" value="${item.datetime || ''}">
         </div>
         <div class="form-group col-span-2">
-          <label>Highlight Sub-label</label>
-          <input type="text" class="input stat-hl" value="${st.highlight || ''}">
+          <label>News Text</label>
+          <textarea class="textarea news-text" rows="2">${item.text || ''}</textarea>
         </div>
       </div>
     `;
     container.appendChild(div);
   });
-}
 
-function renderAbout() {
-  const ab = currentData.about || {};
-  document.getElementById('about_openingQuestion').value = ab.openingQuestion || '';
-
-  const container = document.getElementById('aboutParagraphsContainer');
-  container.innerHTML = '';
-  (ab.paragraphs || []).forEach((p, idx) => {
-    const wrap = document.createElement('div');
-    wrap.className = 'flex gap-2';
-    wrap.innerHTML = `
-      <textarea class="textarea about-para flex-1" rows="3">${p}</textarea>
-      <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">Delete</button>
-    `;
-    container.appendChild(wrap);
+  container.querySelectorAll('.btn-del-news').forEach(btn => {
+    btn.onclick = () => {
+      const idx = parseInt(btn.getAttribute('data-idx'), 10);
+      currentData.news.splice(idx, 1);
+      renderNews();
+    };
   });
 }
 
-function renderResearchInterests() {
-  const container = document.getElementById('researchInterestsContainer');
-  container.innerHTML = '';
-  const list = currentData.researchInterests || [];
-
-  list.forEach((item, idx) => {
-    const card = document.createElement('div');
-    card.className = 'item-card research-item';
-    card.innerHTML = `
-      <div class="item-card-header">
-        <span class="item-card-title">Research Focus #${idx + 1}</span>
-        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.research-item').remove()">Remove</button>
-      </div>
-      <div class="space-y-3">
-        <div class="form-group">
-          <label>Title</label>
-          <input type="text" class="input res-title" value="${item.title || ''}">
-        </div>
-        <div class="form-group">
-          <label>Summary</label>
-          <textarea class="textarea res-sum" rows="2">${item.summary || ''}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Tags (comma-separated)</label>
-          <input type="text" class="input res-tags" value="${(item.tags || []).join(', ')}">
-        </div>
-      </div>
-    `;
-    container.appendChild(card);
+document.getElementById('btnAddNewsItem').onclick = () => {
+  if (!currentData.news) currentData.news = [];
+  currentData.news.unshift({
+    date: 'Oct 2026',
+    datetime: '2026-10',
+    text: 'New milestone or announcement...'
   });
-}
+  renderNews();
+};
 
+// Featured Projects
 function renderFeaturedProjects() {
   const container = document.getElementById('featuredProjectsContainer');
   container.innerHTML = '';
-  const list = currentData.featuredProjects || [];
+  const projects = currentData.featuredProjects || [];
 
-  list.forEach((item, idx) => {
-    const card = document.createElement('div');
-    card.className = 'item-card featured-proj-item';
-    card.innerHTML = `
-      <div class="item-card-header">
-        <span class="item-card-title">Project #${idx + 1}: ${item.title}</span>
-        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.featured-proj-item').remove()">Remove</button>
+  projects.forEach((proj, idx) => {
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    
+    // Render links string
+    const linksArr = (proj.links || []).map(l => `${l.label}: ${l.url}`).join('\n');
+
+    div.innerHTML = `
+      <div class="item-card-header flex-between">
+        <span class="item-card-title">Project ${proj.num || '0' + (idx + 1)}: ${proj.title || 'Untitled'}</span>
+        <button type="button" class="btn btn-danger btn-xs btn-del-proj" data-idx="${idx}">Delete</button>
       </div>
       <div class="form-grid">
+        <div class="form-group">
+          <label>Index Number (e.g. 01, 02)</label>
+          <input type="text" class="input proj-num" value="${proj.num || ''}">
+        </div>
         <div class="form-group">
           <label>Slug (URL identifier)</label>
-          <input type="text" class="input fp-slug" value="${item.slug || ''}">
-        </div>
-        <div class="form-group">
-          <label>Year</label>
-          <input type="text" class="input fp-year" value="${item.year || ''}">
+          <input type="text" class="input proj-slug" value="${proj.slug || ''}">
         </div>
         <div class="form-group col-span-2">
-          <label>Full Title</label>
-          <input type="text" class="input fp-title" value="${item.title || ''}">
+          <label>Project Title</label>
+          <input type="text" class="input proj-title" value="${proj.title || ''}">
         </div>
         <div class="form-group col-span-2">
-          <label>One-Line Summary</label>
-          <textarea class="textarea fp-summary" rows="2">${item.summary || ''}</textarea>
+          <label>Subtitle / Thesis Note</label>
+          <input type="text" class="input proj-sub" value="${proj.sub || ''}">
         </div>
         <div class="form-group col-span-2">
-          <label>Problem Statement</label>
-          <textarea class="textarea fp-problem" rows="3">${item.problem || ''}</textarea>
+          <label>Body Description</label>
+          <textarea class="textarea proj-body" rows="3">${proj.body || ''}</textarea>
         </div>
         <div class="form-group col-span-2">
-          <label>What I Built (One item per line)</label>
-          <textarea class="textarea fp-whatBuilt" rows="4">${(item.whatBuilt || []).join('\n')}</textarea>
+          <label>Empirical Result (optional, highlighted)</label>
+          <textarea class="textarea proj-result" rows="2">${proj.result || ''}</textarea>
         </div>
         <div class="form-group col-span-2">
-          <label>Key Results (One item per line)</label>
-          <textarea class="textarea fp-keyResults" rows="3">${(item.keyResults || []).join('\n')}</textarea>
+          <label>Vector Schematic Caption</label>
+          <input type="text" class="input proj-caption" value="${proj.figureCaption || ''}">
         </div>
         <div class="form-group col-span-2">
-          <label>Tech Tags (comma-separated)</label>
-          <input type="text" class="input fp-techTags" value="${(item.techTags || []).join(', ')}">
+          <label>Publication Status Note</label>
+          <input type="text" class="input proj-status" value="${proj.status || ''}">
         </div>
         <div class="form-group col-span-2">
-          <label>Figure Caption</label>
-          <input type="text" class="input fp-caption" value="${item.figureCaption || ''}">
+          <label>Links (Format: "Label: URL", one per line)</label>
+          <textarea class="textarea proj-links font-mono" rows="2">${linksArr}</textarea>
         </div>
       </div>
     `;
-    container.appendChild(card);
+    container.appendChild(div);
+  });
+
+  container.querySelectorAll('.btn-del-proj').forEach(btn => {
+    btn.onclick = () => {
+      const idx = parseInt(btn.getAttribute('data-idx'), 10);
+      currentData.featuredProjects.splice(idx, 1);
+      renderFeaturedProjects();
+    };
   });
 }
 
-function renderSmallerProjects() {
-  const container = document.getElementById('smallerProjectsContainer');
-  container.innerHTML = '';
-  const list = currentData.smallerProjects || [];
-
-  list.forEach((item, idx) => {
-    const card = document.createElement('div');
-    card.className = 'item-card smaller-proj-item';
-    card.innerHTML = `
-      <div class="item-card-header">
-        <span class="item-card-title">${item.title || 'Project'}</span>
-        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.smaller-proj-item').remove()">Remove</button>
-      </div>
-      <div class="space-y-3">
-        <div class="form-group">
-          <label>Title</label>
-          <input type="text" class="input sp-title" value="${item.title || ''}">
-        </div>
-        <div class="form-group">
-          <label>Description</label>
-          <textarea class="textarea sp-desc" rows="2">${item.description || ''}</textarea>
-        </div>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Publication Venue (Optional)</label>
-            <input type="text" class="input sp-pub" value="${item.publication || ''}">
-          </div>
-          <div class="form-group">
-            <label>DOI Link (Optional)</label>
-            <input type="url" class="input sp-doi" value="${item.doi || ''}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Tags (comma-separated)</label>
-          <input type="text" class="input sp-tags" value="${(item.tags || []).join(', ')}">
-        </div>
-      </div>
-    `;
-    container.appendChild(card);
+document.getElementById('btnAddProject').onclick = () => {
+  if (!currentData.featuredProjects) currentData.featuredProjects = [];
+  const nextNum = '0' + (currentData.featuredProjects.length + 1);
+  currentData.featuredProjects.push({
+    num: nextNum,
+    slug: 'new-research-project',
+    title: 'New Research Project',
+    sub: '2026',
+    body: 'Description of the research methodology and findings...',
+    result: '',
+    figureCaption: 'Schematic, not data.',
+    status: '',
+    links: [{ label: 'Code', url: 'https://github.com/Lamia-Islam' }]
   });
-}
+  renderFeaturedProjects();
+};
 
+// Publications
 function renderPublications() {
-  const container = document.getElementById('publicationsContainer');
-  container.innerHTML = '';
-  const list = currentData.publications || [];
+  const pubs = currentData.publications || { underReview: [], published: [] };
 
-  list.forEach((pub, idx) => {
-    const card = document.createElement('div');
-    card.className = 'item-card pub-item';
-    card.innerHTML = `
-      <div class="item-card-header">
-        <span class="item-card-title">#${idx + 1} &bull; ${pub.category}: ${pub.title.substring(0, 50)}...</span>
-        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.pub-item').remove()">Remove</button>
+  // Under Review
+  const urContainer = document.getElementById('pubsUnderReviewContainer');
+  urContainer.innerHTML = '';
+  (pubs.underReview || []).forEach((pub, idx) => {
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    div.dataset.id = pub.id || '';
+    div.innerHTML = `
+      <div class="item-card-header flex-between">
+        <span class="item-card-title">Under Review #${idx + 1}</span>
+        <button type="button" class="btn btn-danger btn-xs btn-del-ur" data-idx="${idx}">Delete</button>
       </div>
       <div class="form-grid">
-        <div class="form-group">
-          <label>Category</label>
-          <select class="select pub-cat">
-            <option value="Journal" ${pub.category === 'Journal' ? 'selected' : ''}>Journal (Under Review)</option>
-            <option value="Conference" ${pub.category === 'Conference' ? 'selected' : ''}>Conference Paper</option>
-            <option value="Submitted" ${pub.category === 'Submitted' ? 'selected' : ''}>Submitted</option>
-            <option value="Preprint" ${pub.category === 'Preprint' ? 'selected' : ''}>Preprint</option>
-            <option value="Presentation" ${pub.category === 'Presentation' ? 'selected' : ''}>Presentation</option>
-          </select>
+        <div class="form-group col-span-2">
+          <label>Authors</label>
+          <input type="text" class="input ur-authors" value="${pub.authors || ''}">
         </div>
-        <div class="form-group">
-          <label>Date or Year</label>
-          <input type="text" class="input pub-date" value="${pub.dateOrYear || ''}">
+        <div class="form-group col-span-2">
+          <label>Paper Title</label>
+          <input type="text" class="input ur-title" value="${pub.title || ''}">
+        </div>
+        <div class="form-group col-span-2">
+          <label>Target Journal / Venue</label>
+          <input type="text" class="input ur-venue" value="${pub.venue || ''}">
+        </div>
+      </div>
+    `;
+    urContainer.appendChild(div);
+  });
+
+  urContainer.querySelectorAll('.btn-del-ur').forEach(btn => {
+    btn.onclick = () => {
+      const idx = parseInt(btn.getAttribute('data-idx'), 10);
+      currentData.publications.underReview.splice(idx, 1);
+      renderPublications();
+    };
+  });
+
+  // Published
+  const pubContainer = document.getElementById('pubsPublishedContainer');
+  pubContainer.innerHTML = '';
+  (pubs.published || []).forEach((pub, idx) => {
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    div.dataset.id = pub.id || '';
+    div.innerHTML = `
+      <div class="item-card-header flex-between">
+        <span class="item-card-title">Published #${idx + 1}</span>
+        <button type="button" class="btn btn-danger btn-xs btn-del-pub" data-idx="${idx}">Delete</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group col-span-2">
+          <label>Authors</label>
+          <input type="text" class="input pub-authors" value="${pub.authors || ''}">
         </div>
         <div class="form-group col-span-2">
           <label>Paper Title</label>
           <input type="text" class="input pub-title" value="${pub.title || ''}">
         </div>
-        <div class="form-group col-span-2">
-          <label>Authors (Lamia Islam / Islam, L. will be bolded)</label>
-          <input type="text" class="input pub-authors" value="${pub.authors || ''}">
-        </div>
-        <div class="form-group col-span-2">
-          <label>Venue (Journal name / Conference)</label>
+        <div class="form-group">
+          <label>Conference / Venue</label>
           <input type="text" class="input pub-venue" value="${pub.venue || ''}">
         </div>
         <div class="form-group">
-          <label>DOI (e.g. 10.1109/...) Optional</label>
-          <input type="text" class="input pub-doi" value="${pub.doi || ''}">
-        </div>
-        <div class="form-group">
-          <label>Article URL (Optional)</label>
-          <input type="url" class="input pub-url" value="${pub.url || ''}">
+          <label>DOI URL</label>
+          <input type="url" class="input pub-doi" value="${pub.doiUrl || ''}">
         </div>
       </div>
     `;
-    container.appendChild(card);
+    pubContainer.appendChild(div);
+  });
+
+  pubContainer.querySelectorAll('.btn-del-pub').forEach(btn => {
+    btn.onclick = () => {
+      const idx = parseInt(btn.getAttribute('data-idx'), 10);
+      currentData.publications.published.splice(idx, 1);
+      renderPublications();
+    };
   });
 }
 
-function renderExperience() {
-  const container = document.getElementById('experienceContainer');
-  container.innerHTML = '';
-  const list = currentData.experience || [];
-
-  list.forEach((exp, idx) => {
-    const card = document.createElement('div');
-    card.className = 'item-card exp-item';
-    card.innerHTML = `
-      <div class="item-card-header">
-        <span class="item-card-title">${exp.title} &bull; ${exp.organization}</span>
-        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.exp-item').remove()">Remove</button>
-      </div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Role Title</label>
-          <input type="text" class="input exp-title" value="${exp.title || ''}">
-        </div>
-        <div class="form-group">
-          <label>Period</label>
-          <input type="text" class="input exp-period" value="${exp.period || ''}">
-        </div>
-        <div class="form-group">
-          <label>Organization</label>
-          <input type="text" class="input exp-org" value="${exp.organization || ''}">
-        </div>
-        <div class="form-group">
-          <label>Location</label>
-          <input type="text" class="input exp-loc" value="${exp.location || ''}">
-        </div>
-        <div class="form-group col-span-2">
-          <label>Supervisor / Mentor (Optional)</label>
-          <input type="text" class="input exp-sup" value="${exp.supervisorOrMentor || ''}">
-        </div>
-        <div class="form-group col-span-2">
-          <label>Bullets (One bullet per line)</label>
-          <textarea class="textarea exp-bullets" rows="3">${(exp.bullets || []).join('\n')}</textarea>
-        </div>
-      </div>
-    `;
-    container.appendChild(card);
+document.getElementById('btnAddPub').onclick = () => {
+  if (!currentData.publications) currentData.publications = { underReview: [], published: [] };
+  if (!currentData.publications.published) currentData.publications.published = [];
+  currentData.publications.published.push({
+    authors: 'L. Islam, et al.',
+    boldAuthor: 'L. Islam',
+    title: 'New Publication Title',
+    venue: 'IEEE Conference 2026',
+    doiUrl: 'https://doi.org/'
   });
-}
+  renderPublications();
+};
 
-function renderEducation() {
-  const container = document.getElementById('educationContainer');
-  container.innerHTML = '';
-  const list = currentData.education || [];
-
-  list.forEach((edu, idx) => {
-    const card = document.createElement('div');
-    card.className = 'item-card edu-item';
-    card.innerHTML = `
-      <div class="item-card-header">
-        <span class="item-card-title">${edu.degree}</span>
-        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.edu-item').remove()">Remove</button>
-      </div>
-      <div class="form-grid">
-        <div class="form-group col-span-2">
-          <label>Degree</label>
-          <input type="text" class="input edu-deg" value="${edu.degree || ''}">
-        </div>
-        <div class="form-group">
-          <label>Institution</label>
-          <input type="text" class="input edu-inst" value="${edu.institution || ''}">
-        </div>
-        <div class="form-group">
-          <label>Period / Session</label>
-          <input type="text" class="input edu-per" value="${edu.period || ''}">
-        </div>
-        <div class="form-group">
-          <label>Grade / CGPA</label>
-          <input type="text" class="input edu-grd" value="${edu.grade || ''}">
-        </div>
-        <div class="form-group">
-          <label>Details</label>
-          <input type="text" class="input edu-det" value="${edu.details || ''}">
-        </div>
-        <div class="form-group col-span-2">
-          <label>Thesis Note (Optional)</label>
-          <textarea class="textarea edu-the" rows="2">${edu.thesis || ''}</textarea>
-        </div>
-      </div>
-    `;
-    container.appendChild(card);
-  });
-}
-
-function renderSkills() {
-  const container = document.getElementById('skillsContainer');
-  container.innerHTML = '';
-  const list = currentData.skills || [];
-
-  list.forEach((sk, idx) => {
-    const card = document.createElement('div');
-    card.className = 'item-card skill-item';
-    card.innerHTML = `
-      <div class="item-card-header">
-        <span class="item-card-title">Group: ${sk.category}</span>
-        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.skill-item').remove()">Remove</button>
-      </div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Category Name</label>
-          <input type="text" class="input sk-cat" value="${sk.category || ''}">
-        </div>
-        <div class="form-group col-span-2">
-          <label>Skills (comma-separated chips)</label>
-          <input type="text" class="input sk-list" value="${(sk.skills || []).join(', ')}">
-        </div>
-      </div>
-    `;
-    container.appendChild(card);
-  });
-}
-
-function renderService() {
-  const container = document.getElementById('serviceContainer');
-  container.innerHTML = '';
-  const list = currentData.academicService || [];
-
-  list.forEach((srv, idx) => {
-    const card = document.createElement('div');
-    card.className = 'item-card srv-item';
-    card.innerHTML = `
-      <div class="item-card-header">
-        <span class="item-card-title">${srv.role} &bull; ${srv.organization}</span>
-        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.srv-item').remove()">Remove</button>
+// Experience, Education & Service
+function renderExpEduService() {
+  // Experience
+  const expContainer = document.getElementById('expContainer');
+  expContainer.innerHTML = '';
+  (currentData.experience || []).forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    div.innerHTML = `
+      <div class="item-card-header flex-between">
+        <span class="item-card-title">${item.role || 'Role'} @ ${item.org || 'Organization'}</span>
+        <button type="button" class="btn btn-danger btn-xs btn-del-exp" data-idx="${idx}">Delete</button>
       </div>
       <div class="form-grid">
         <div class="form-group">
           <label>Role</label>
-          <input type="text" class="input srv-role" value="${srv.role || ''}">
+          <input type="text" class="input exp-role" value="${item.role || ''}">
         </div>
         <div class="form-group">
           <label>Organization</label>
-          <input type="text" class="input srv-org" value="${srv.organization || ''}">
+          <input type="text" class="input exp-org" value="${item.org || ''}">
         </div>
         <div class="form-group col-span-2">
-          <label>Description</label>
-          <textarea class="textarea srv-desc" rows="2">${srv.description || ''}</textarea>
+          <label>Period</label>
+          <input type="text" class="input exp-period" value="${item.period || ''}">
         </div>
       </div>
     `;
-    container.appendChild(card);
+    expContainer.appendChild(div);
   });
-}
 
-function renderHonors() {
-  const container = document.getElementById('honorsContainer');
-  container.innerHTML = '';
-  const list = currentData.honorsAndCertifications || [];
+  expContainer.querySelectorAll('.btn-del-exp').forEach(btn => {
+    btn.onclick = () => {
+      const idx = parseInt(btn.getAttribute('data-idx'), 10);
+      currentData.experience.splice(idx, 1);
+      renderExpEduService();
+    };
+  });
 
-  list.forEach((hon, idx) => {
-    const card = document.createElement('div');
-    card.className = 'item-card hon-item';
-    card.innerHTML = `
-      <div class="item-card-header">
-        <span class="item-card-title">${hon.title}</span>
-        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.hon-item').remove()">Remove</button>
+  // Education
+  const eduContainer = document.getElementById('eduContainer');
+  eduContainer.innerHTML = '';
+  (currentData.education || []).forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    div.innerHTML = `
+      <div class="item-card-header flex-between">
+        <span class="item-card-title">${item.degree || 'Degree'}</span>
+        <button type="button" class="btn btn-danger btn-xs btn-del-edu" data-idx="${idx}">Delete</button>
       </div>
       <div class="form-grid">
         <div class="form-group">
-          <label>Title</label>
-          <input type="text" class="input hon-title" value="${hon.title || ''}">
+          <label>Degree</label>
+          <input type="text" class="input edu-degree" value="${item.degree || ''}">
         </div>
         <div class="form-group">
-          <label>Issuer</label>
-          <input type="text" class="input hon-iss" value="${hon.issuer || ''}">
+          <label>Institution</label>
+          <input type="text" class="input edu-inst" value="${item.institution || ''}">
         </div>
         <div class="form-group col-span-2">
-          <label>Description</label>
-          <textarea class="textarea hon-desc" rows="2">${hon.description || ''}</textarea>
+          <label>Period</label>
+          <input type="text" class="input edu-period" value="${item.period || ''}">
         </div>
       </div>
     `;
-    container.appendChild(card);
+    eduContainer.appendChild(div);
+  });
+
+  eduContainer.querySelectorAll('.btn-del-edu').forEach(btn => {
+    btn.onclick = () => {
+      const idx = parseInt(btn.getAttribute('data-idx'), 10);
+      currentData.education.splice(idx, 1);
+      renderExpEduService();
+    };
+  });
+
+  // Service
+  const srvContainer = document.getElementById('serviceContainer');
+  srvContainer.innerHTML = '';
+  (currentData.service || []).forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    div.innerHTML = `
+      <div class="item-card-header flex-between">
+        <span class="item-card-title">${item.role || 'Service'}</span>
+        <button type="button" class="btn btn-danger btn-xs btn-del-srv" data-idx="${idx}">Delete</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Role</label>
+          <input type="text" class="input srv-role" value="${item.role || ''}">
+        </div>
+        <div class="form-group">
+          <label>Conferences / Venues</label>
+          <input type="text" class="input srv-venue" value="${item.venue || ''}">
+        </div>
+      </div>
+    `;
+    srvContainer.appendChild(div);
+  });
+
+  srvContainer.querySelectorAll('.btn-del-srv').forEach(btn => {
+    btn.onclick = () => {
+      const idx = parseInt(btn.getAttribute('data-idx'), 10);
+      currentData.service.splice(idx, 1);
+      renderExpEduService();
+    };
   });
 }
 
-// COLLECT FORM DATA INTO currentData
+document.getElementById('btnAddExp').onclick = () => {
+  if (!currentData.experience) currentData.experience = [];
+  currentData.experience.push({ role: 'Research Role', org: 'Institution', period: '2026 - Present' });
+  renderExpEduService();
+};
+
+document.getElementById('btnAddEdu').onclick = () => {
+  if (!currentData.education) currentData.education = [];
+  currentData.education.push({ degree: 'Degree Name', institution: 'University', period: '2026' });
+  renderExpEduService();
+};
+
+document.getElementById('btnAddService').onclick = () => {
+  if (!currentData.service) currentData.service = [];
+  currentData.service.push({ role: 'Reviewer', venue: 'IEEE Conference' });
+  renderExpEduService();
+};
+
+// --- DATA COLLECTION & SAVE ---
+
 function collectFormData() {
   if (!currentData) currentData = {};
 
@@ -597,588 +535,186 @@ function collectFormData() {
       scholar: document.getElementById('prof_scholar').value.trim(),
       github: document.getElementById('prof_github').value.trim(),
       linkedin: document.getElementById('prof_linkedin').value.trim(),
-      researchgate: document.getElementById('prof_researchgate').value.trim(),
       orcid: document.getElementById('prof_orcid').value.trim(),
     }
   };
 
-  // 2. Stats
-  const statCards = document.querySelectorAll('#statsContainer .item-card');
-  currentData.stats = Array.from(statCards).map(card => ({
-    value: card.querySelector('.stat-val').value.trim(),
-    label: card.querySelector('.stat-lbl').value.trim(),
-    highlight: card.querySelector('.stat-hl').value.trim(),
-  }));
-
-  // 3. About
+  // 2. About
   const paraEls = document.querySelectorAll('.about-para');
   currentData.about = {
-    openingQuestion: document.getElementById('about_openingQuestion').value.trim(),
+    lede: document.getElementById('about_lede').value.trim(),
     paragraphs: Array.from(paraEls).map(el => el.value.trim()).filter(Boolean)
   };
 
-  // 4. Research Interests
-  const resCards = document.querySelectorAll('.research-item');
-  currentData.researchInterests = Array.from(resCards).map(card => ({
-    title: card.querySelector('.res-title').value.trim(),
-    summary: card.querySelector('.res-sum').value.trim(),
-    tags: card.querySelector('.res-tags').value.split(',').map(s => s.trim()).filter(Boolean)
+  // 3. News
+  const newsCards = document.querySelectorAll('#newsContainer .item-card');
+  currentData.news = Array.from(newsCards).map(card => ({
+    date: card.querySelector('.news-date').value.trim(),
+    datetime: card.querySelector('.news-datetime').value.trim(),
+    text: card.querySelector('.news-text').value.trim(),
   }));
 
-  // 5. Featured Projects
-  const fpCards = document.querySelectorAll('.featured-proj-item');
+  // 4. Featured Projects
+  const fpCards = document.querySelectorAll('#featuredProjectsContainer .item-card');
   currentData.featuredProjects = Array.from(fpCards).map((card, idx) => {
-    const existing = (currentData.featuredProjects && currentData.featuredProjects[idx]) || {};
+    const orig = (currentData.featuredProjects && currentData.featuredProjects[idx]) || {};
+    const linksRaw = card.querySelector('.proj-links').value.trim();
+    const links = linksRaw.split('\n').filter(Boolean).map(line => {
+      const parts = line.split(':');
+      const label = parts[0].trim();
+      const url = parts.slice(1).join(':').trim();
+      return { label, url };
+    });
+
     return {
-      ...existing,
-      slug: card.querySelector('.fp-slug').value.trim(),
-      year: card.querySelector('.fp-year').value.trim(),
-      title: card.querySelector('.fp-title').value.trim(),
-      shortTitle: existing.shortTitle || card.querySelector('.fp-title').value.trim(),
-      summary: card.querySelector('.fp-summary').value.trim(),
-      problem: card.querySelector('.fp-problem').value.trim(),
-      whatBuilt: card.querySelector('.fp-whatBuilt').value.split('\n').map(s => s.trim()).filter(Boolean),
-      keyResults: card.querySelector('.fp-keyResults').value.split('\n').map(s => s.trim()).filter(Boolean),
-      techTags: card.querySelector('.fp-techTags').value.split(',').map(s => s.trim()).filter(Boolean),
-      figureCaption: card.querySelector('.fp-caption').value.trim(),
-      links: existing.links || [],
-      thesisDetails: existing.thesisDetails,
-      papers: existing.papers,
+      ...orig,
+      num: card.querySelector('.proj-num').value.trim(),
+      slug: card.querySelector('.proj-slug').value.trim(),
+      title: card.querySelector('.proj-title').value.trim(),
+      sub: card.querySelector('.proj-sub').value.trim(),
+      body: card.querySelector('.proj-body').value.trim(),
+      result: card.querySelector('.proj-result').value.trim(),
+      figureCaption: card.querySelector('.proj-caption').value.trim(),
+      status: card.querySelector('.proj-status').value.trim(),
+      links
     };
   });
 
-  // 6. Smaller Projects
-  const spCards = document.querySelectorAll('.smaller-proj-item');
-  currentData.smallerProjects = Array.from(spCards).map(card => {
-    const pub = card.querySelector('.sp-pub').value.trim();
-    const doi = card.querySelector('.sp-doi').value.trim();
-    const item = {
-      title: card.querySelector('.sp-title').value.trim(),
-      description: card.querySelector('.sp-desc').value.trim(),
-      tags: card.querySelector('.sp-tags').value.split(',').map(s => s.trim()).filter(Boolean),
-    };
-    if (pub) item.publication = pub;
-    if (doi) item.doi = doi;
-    return item;
-  });
+  // 5. Publications
+  const urCards = document.querySelectorAll('#pubsUnderReviewContainer .item-card');
+  const pubCards = document.querySelectorAll('#pubsPublishedContainer .item-card');
 
-  // 7. Publications
-  const pubCards = document.querySelectorAll('.pub-item');
-  currentData.publications = Array.from(pubCards).map((card, idx) => {
-    const doi = card.querySelector('.pub-doi').value.trim();
-    const url = card.querySelector('.pub-url').value.trim();
-    const item = {
-      id: `pub-${idx + 1}`,
-      category: card.querySelector('.pub-cat').value,
-      dateOrYear: card.querySelector('.pub-date').value.trim(),
-      title: card.querySelector('.pub-title').value.trim(),
-      authors: card.querySelector('.pub-authors').value.trim(),
-      venue: card.querySelector('.pub-venue').value.trim(),
-    };
-    if (doi) item.doi = doi;
-    if (url) item.url = url;
-    return item;
-  });
+  currentData.publications = {
+    underReview: Array.from(urCards).map((card, idx) => ({
+      id: card.dataset.id || `pub-ur-${idx + 1}`,
+      authors: card.querySelector('.ur-authors').value.trim(),
+      boldAuthor: 'L. Islam',
+      title: card.querySelector('.ur-title').value.trim(),
+      venue: card.querySelector('.ur-venue').value.trim()
+    })),
+    published: Array.from(pubCards).map((card, idx) => {
+      const doi = card.querySelector('.pub-doi').value.trim();
+      return {
+        id: card.dataset.id || `pub-${idx + 1}`,
+        authors: card.querySelector('.pub-authors').value.trim(),
+        boldAuthor: 'L. Islam',
+        title: card.querySelector('.pub-title').value.trim(),
+        venue: card.querySelector('.pub-venue').value.trim(),
+        doiUrl: doi,
+        doiDisplay: doi.replace(/^https?:\/\//, '')
+      };
+    })
+  };
 
-  // 8. Experience
-  const expCards = document.querySelectorAll('.exp-item');
-  currentData.experience = Array.from(expCards).map(card => {
-    const sup = card.querySelector('.exp-sup').value.trim();
-    const item = {
-      title: card.querySelector('.exp-title').value.trim(),
-      period: card.querySelector('.exp-period').value.trim(),
-      organization: card.querySelector('.exp-org').value.trim(),
-      location: card.querySelector('.exp-loc').value.trim(),
-      bullets: card.querySelector('.exp-bullets').value.split('\n').map(s => s.trim()).filter(Boolean),
-    };
-    if (sup) item.supervisorOrMentor = sup;
-    return item;
-  });
-
-  // 9. Education
-  const eduCards = document.querySelectorAll('.edu-item');
-  currentData.education = Array.from(eduCards).map(card => {
-    const the = card.querySelector('.edu-the') ? card.querySelector('.edu-the').value.trim() : '';
-    const det = card.querySelector('.edu-det').value.trim();
-    const item = {
-      degree: card.querySelector('.edu-deg').value.trim(),
-      institution: card.querySelector('.edu-inst').value.trim(),
-      period: card.querySelector('.edu-per').value.trim(),
-      grade: card.querySelector('.edu-grd').value.trim(),
-    };
-    if (det) item.details = det;
-    if (the) item.thesis = the;
-    return item;
-  });
-
-  // 10. Skills
-  const skCards = document.querySelectorAll('.skill-item');
-  currentData.skills = Array.from(skCards).map(card => ({
-    category: card.querySelector('.sk-cat').value.trim(),
-    skills: card.querySelector('.sk-list').value.split(',').map(s => s.trim()).filter(Boolean),
+  // 6. Experience, Education & Service
+  const expCards = document.querySelectorAll('#expContainer .item-card');
+  currentData.experience = Array.from(expCards).map(card => ({
+    role: card.querySelector('.exp-role').value.trim(),
+    org: card.querySelector('.exp-org').value.trim(),
+    period: card.querySelector('.exp-period').value.trim(),
   }));
 
-  // 11. Academic Service
-  const srvCards = document.querySelectorAll('.srv-item');
-  currentData.academicService = Array.from(srvCards).map(card => ({
+  const eduCards = document.querySelectorAll('#eduContainer .item-card');
+  currentData.education = Array.from(eduCards).map(card => ({
+    degree: card.querySelector('.edu-degree').value.trim(),
+    institution: card.querySelector('.edu-inst').value.trim(),
+    period: card.querySelector('.edu-period').value.trim(),
+  }));
+
+  const srvCards = document.querySelectorAll('#serviceContainer .item-card');
+  currentData.service = Array.from(srvCards).map(card => ({
     role: card.querySelector('.srv-role').value.trim(),
-    organization: card.querySelector('.srv-org').value.trim(),
-    description: card.querySelector('.srv-desc').value.trim(),
-  }));
-
-  // 12. Honors
-  const honCards = document.querySelectorAll('.hon-item');
-  currentData.honorsAndCertifications = Array.from(honCards).map(card => ({
-    title: card.querySelector('.hon-title').value.trim(),
-    issuer: card.querySelector('.hon-iss').value.trim(),
-    description: card.querySelector('.hon-desc').value.trim(),
+    venue: card.querySelector('.srv-venue').value.trim(),
   }));
 }
 
-// WIRE UP ALL SEPARATE ADD BUTTONS & SAVE ACTIONS
-
-// 1. About Me Paragraph
-if (document.getElementById('btnAddParagraph')) {
-  document.getElementById('btnAddParagraph').onclick = () => showAddForm('about');
-}
-if (document.getElementById('btnSaveNewParagraph')) {
-  document.getElementById('btnSaveNewParagraph').onclick = () => {
-    const text = document.getElementById('new_about_text').value.trim();
-    if (!text) {
-      showToast('Paragraph text cannot be blank', 'error');
-      return;
-    }
-    if (!currentData.about) currentData.about = { paragraphs: [] };
-    if (!currentData.about.paragraphs) currentData.about.paragraphs = [];
-    currentData.about.paragraphs.push(text);
-    renderAbout();
-    hideAddForm('about');
-    savePortfolioData('✓ Added new bio paragraph and saved to portfolio-data.json!');
-  };
-}
-
-// 2. Research Interests
-if (document.getElementById('btnAddInterest')) {
-  document.getElementById('btnAddInterest').onclick = () => showAddForm('research');
-}
-if (document.getElementById('btnSaveNewResearch')) {
-  document.getElementById('btnSaveNewResearch').onclick = () => {
-    const title = document.getElementById('new_res_title').value.trim();
-    const summary = document.getElementById('new_res_summary').value.trim();
-    const tags = document.getElementById('new_res_tags').value.split(',').map(s => s.trim()).filter(Boolean);
-    if (!title) {
-      showToast('Focus area title is required', 'error');
-      return;
-    }
-    if (!summary) {
-      showToast('Summary description is required', 'error');
-      return;
-    }
-    if (!currentData.researchInterests) currentData.researchInterests = [];
-    currentData.researchInterests.push({ title, summary, tags });
-    renderResearchInterests();
-    hideAddForm('research');
-    savePortfolioData('✓ Added new research focus area and saved to portfolio-data.json!');
-  };
-}
-
-// 3. Featured Projects
-if (document.getElementById('btnAddFeaturedProject')) {
-  document.getElementById('btnAddFeaturedProject').onclick = () => showAddForm('featured');
-}
-if (document.getElementById('btnSaveNewFeaturedProject')) {
-  document.getElementById('btnSaveNewFeaturedProject').onclick = () => {
-    const slug = document.getElementById('new_fp_slug').value.trim();
-    const title = document.getElementById('new_fp_title').value.trim();
-    const summary = document.getElementById('new_fp_summary').value.trim();
-    if (!title) {
-      showToast('Project title is required', 'error');
-      return;
-    }
-    if (!slug) {
-      showToast('Project slug is required for URL navigation', 'error');
-      return;
-    }
-    if (!summary) {
-      showToast('One-line summary is required', 'error');
-      return;
-    }
-    const cleanSlug = slug.toLowerCase().replace(/[^a-z0-9_-]/g, '-');
-    const newProject = {
-      slug: cleanSlug,
-      year: document.getElementById('new_fp_year').value.trim() || '2026',
-      title,
-      shortTitle: document.getElementById('new_fp_shortTitle').value.trim() || title,
-      summary,
-      problem: document.getElementById('new_fp_problem').value.trim(),
-      whatBuilt: document.getElementById('new_fp_whatBuilt').value.split('\n').map(s => s.trim()).filter(Boolean),
-      keyResults: document.getElementById('new_fp_keyResults').value.split('\n').map(s => s.trim()).filter(Boolean),
-      techTags: document.getElementById('new_fp_techTags').value.split(',').map(s => s.trim()).filter(Boolean),
-      figureCaption: document.getElementById('new_fp_caption').value.trim(),
-      links: [],
-    };
-    if (!currentData.featuredProjects) currentData.featuredProjects = [];
-    currentData.featuredProjects.push(newProject);
-    renderFeaturedProjects();
-    hideAddForm('featured');
-    savePortfolioData('✓ Added new featured project and saved to portfolio-data.json!');
-  };
-}
-
-// 4. More Projects & Prototypes
-if (document.getElementById('btnAddSmallerProject')) {
-  document.getElementById('btnAddSmallerProject').onclick = () => showAddForm('smaller');
-}
-if (document.getElementById('btnSaveNewSmallerProject')) {
-  document.getElementById('btnSaveNewSmallerProject').onclick = () => {
-    const title = document.getElementById('new_sp_title').value.trim();
-    const description = document.getElementById('new_sp_desc').value.trim();
-    if (!title) {
-      showToast('Project title is required', 'error');
-      return;
-    }
-    if (!description) {
-      showToast('Description is required', 'error');
-      return;
-    }
-    const pub = document.getElementById('new_sp_pub').value.trim();
-    const doi = document.getElementById('new_sp_doi').value.trim();
-    const tags = document.getElementById('new_sp_tags').value.split(',').map(s => s.trim()).filter(Boolean);
-    const item = { title, description, tags };
-    if (pub) item.publication = pub;
-    if (doi) item.doi = doi;
-
-    if (!currentData.smallerProjects) currentData.smallerProjects = [];
-    currentData.smallerProjects.push(item);
-    renderSmallerProjects();
-    hideAddForm('smaller');
-    savePortfolioData('✓ Added new prototype project and saved to portfolio-data.json!');
-  };
-}
-
-// 5. Publications
-if (document.getElementById('btnAddPublication')) {
-  document.getElementById('btnAddPublication').onclick = () => showAddForm('pubs');
-}
-if (document.getElementById('btnSaveNewPublication')) {
-  document.getElementById('btnSaveNewPublication').onclick = () => {
-    const title = document.getElementById('new_pub_title').value.trim();
-    if (!title) {
-      showToast('Paper title is required', 'error');
-      return;
-    }
-    const pub = {
-      category: document.getElementById('new_pub_category').value,
-      dateOrYear: document.getElementById('new_pub_dateOrYear').value.trim(),
-      title,
-      authors: document.getElementById('new_pub_authors').value.trim(),
-      venue: document.getElementById('new_pub_venue').value.trim(),
-    };
-    const doi = document.getElementById('new_pub_doi').value.trim();
-    const url = document.getElementById('new_pub_url').value.trim();
-    if (doi) pub.doi = doi;
-    if (url) pub.url = url;
-
-    if (!currentData.publications) currentData.publications = [];
-    currentData.publications.unshift(pub); // Newest publication at top
-    renderPublications();
-    hideAddForm('pubs');
-    savePortfolioData('✓ Added new publication and saved to portfolio-data.json!');
-  };
-}
-
-// 6. Experience
-if (document.getElementById('btnAddExperience')) {
-  document.getElementById('btnAddExperience').onclick = () => showAddForm('exp');
-}
-if (document.getElementById('btnSaveNewExperience')) {
-  document.getElementById('btnSaveNewExperience').onclick = () => {
-    const title = document.getElementById('new_exp_title').value.trim();
-    const organization = document.getElementById('new_exp_org').value.trim();
-    if (!title) {
-      showToast('Role title is required', 'error');
-      return;
-    }
-    if (!organization) {
-      showToast('Organization is required', 'error');
-      return;
-    }
-    const sup = document.getElementById('new_exp_sup').value.trim();
-    const item = {
-      title,
-      organization,
-      period: document.getElementById('new_exp_period').value.trim(),
-      location: document.getElementById('new_exp_loc').value.trim(),
-      bullets: document.getElementById('new_exp_bullets').value.split('\n').map(s => s.trim()).filter(Boolean),
-    };
-    if (sup) item.supervisorOrMentor = sup;
-
-    if (!currentData.experience) currentData.experience = [];
-    currentData.experience.unshift(item); // Most recent role at top
-    renderExperience();
-    hideAddForm('exp');
-    savePortfolioData('✓ Added new experience role and saved to portfolio-data.json!');
-  };
-}
-
-// 7. Education
-if (document.getElementById('btnAddEducation')) {
-  document.getElementById('btnAddEducation').onclick = () => showAddForm('edu');
-}
-if (document.getElementById('btnSaveNewEducation')) {
-  document.getElementById('btnSaveNewEducation').onclick = () => {
-    const degree = document.getElementById('new_edu_deg').value.trim();
-    const institution = document.getElementById('new_edu_inst').value.trim();
-    if (!degree) {
-      showToast('Degree title is required', 'error');
-      return;
-    }
-    if (!institution) {
-      showToast('Institution is required', 'error');
-      return;
-    }
-    const det = document.getElementById('new_edu_det').value.trim();
-    const the = document.getElementById('new_edu_the').value.trim();
-    const item = {
-      degree,
-      institution,
-      period: document.getElementById('new_edu_per').value.trim(),
-      grade: document.getElementById('new_edu_grd').value.trim(),
-    };
-    if (det) item.details = det;
-    if (the) item.thesis = the;
-
-    if (!currentData.education) currentData.education = [];
-    currentData.education.push(item);
-    renderEducation();
-    hideAddForm('edu');
-    savePortfolioData('✓ Added new degree and saved to portfolio-data.json!');
-  };
-}
-
-// 8. Skills
-if (document.getElementById('btnAddSkillGroup')) {
-  document.getElementById('btnAddSkillGroup').onclick = () => showAddForm('skills');
-}
-if (document.getElementById('btnSaveNewSkillGroup')) {
-  document.getElementById('btnSaveNewSkillGroup').onclick = () => {
-    const category = document.getElementById('new_sk_cat').value.trim();
-    const skills = document.getElementById('new_sk_list').value.split(',').map(s => s.trim()).filter(Boolean);
-    if (!category) {
-      showToast('Skill category name is required', 'error');
-      return;
-    }
-    if (skills.length === 0) {
-      showToast('At least one skill is required', 'error');
-      return;
-    }
-
-    if (!currentData.skills) currentData.skills = [];
-    currentData.skills.push({ category, skills });
-    renderSkills();
-    hideAddForm('skills');
-    savePortfolioData('✓ Added new skill category and saved to portfolio-data.json!');
-  };
-}
-
-// 9. Academic Service
-if (document.getElementById('btnAddService')) {
-  document.getElementById('btnAddService').onclick = () => showAddForm('service');
-}
-if (document.getElementById('btnSaveNewService')) {
-  document.getElementById('btnSaveNewService').onclick = () => {
-    const role = document.getElementById('new_srv_role').value.trim();
-    const organization = document.getElementById('new_srv_org').value.trim();
-    if (!role) {
-      showToast('Service role is required', 'error');
-      return;
-    }
-    if (!organization) {
-      showToast('Organization is required', 'error');
-      return;
-    }
-    const item = {
-      role,
-      organization,
-      description: document.getElementById('new_srv_desc').value.trim(),
-    };
-
-    if (!currentData.academicService) currentData.academicService = [];
-    currentData.academicService.unshift(item);
-    renderService();
-    hideAddForm('service');
-    savePortfolioData('✓ Added new academic service item and saved to portfolio-data.json!');
-  };
-}
-
-// 10. Honors & Certifications
-if (document.getElementById('btnAddHonor')) {
-  document.getElementById('btnAddHonor').onclick = () => showAddForm('honors');
-}
-if (document.getElementById('btnSaveNewHonor')) {
-  document.getElementById('btnSaveNewHonor').onclick = () => {
-    const title = document.getElementById('new_hon_title').value.trim();
-    const issuer = document.getElementById('new_hon_iss').value.trim();
-    if (!title) {
-      showToast('Honor or award title is required', 'error');
-      return;
-    }
-    if (!issuer) {
-      showToast('Issuer is required', 'error');
-      return;
-    }
-    const item = {
-      title,
-      issuer,
-      description: document.getElementById('new_hon_desc').value.trim(),
-    };
-
-    if (!currentData.honorsAndCertifications) currentData.honorsAndCertifications = [];
-    currentData.honorsAndCertifications.unshift(item);
-    renderHonors();
-    hideAddForm('honors');
-    savePortfolioData('✓ Added new honor/certification and saved to portfolio-data.json!');
-  };
-}
-
-// Back and Cancel Buttons for all Add Views
-document.querySelectorAll('.btn-back-to-list, .btn-cancel-add').forEach(btn => {
-  btn.onclick = () => {
-    const sec = btn.getAttribute('data-section');
-    if (sec) hideAddForm(sec);
-  };
-});
-
-// SAVE TO JSON ACTION (Direct save to src/data/portfolio-data.json without rebuilding)
-async function savePortfolioData(successMessage = '✓ Changes saved to portfolio-data.json!') {
-  // If active tab is raw JSON, parse from textarea first
-  const activeTab = document.querySelector('.tab-pane.active');
-  if (activeTab && activeTab.id === 'tab-raw') {
-    try {
-      currentData = JSON.parse(rawJsonTextarea.value);
-    } catch (e) {
-      showToast('Cannot save: JSON syntax is invalid: ' + e.message, 'error');
-      return false;
-    }
-  } else {
-    collectFormData();
-  }
-
-  if (btnPublish) {
-    btnPublish.disabled = true;
-    btnPublish.innerHTML = `<span>Saving changes...</span>`;
-  }
-
+// Save portfolio data to server
+async function savePortfolioData() {
   try {
+    collectFormData();
+    statusText.textContent = 'Saving changes to portfolio-data.json...';
+
     const res = await fetch('/api/portfolio', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: currentData }),
+      body: JSON.stringify(currentData),
     });
 
-    const result = await res.json();
-    if (btnPublish) {
-      btnPublish.disabled = false;
-      btnPublish.innerHTML = `
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-        <span>Save Changes</span>
-        <kbd class="shortcut-key">Ctrl+S</kbd>
-      `;
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || `HTTP ${res.status}`);
     }
 
-    if (result.success) {
-      showToast(successMessage, 'success');
-      if (overviewLastMod) {
-        overviewLastMod.textContent = new Date(result.timestamp || Date.now()).toLocaleString();
-      }
-      return true;
-    } else {
-      showToast('Failed to save JSON: ' + (result.error || 'Unknown error'), 'error');
-      return false;
+    const json = await res.json();
+    if (json.lastModified) {
+      overviewLastMod.textContent = new Date(json.lastModified).toLocaleString();
     }
+
+    statusText.textContent = 'Changes saved successfully';
+    showToast('Saved to portfolio-data.json successfully!');
   } catch (err) {
-    if (btnPublish) {
-      btnPublish.disabled = false;
-      btnPublish.innerHTML = `
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-        <span>Save Changes</span>
-        <kbd class="shortcut-key">Ctrl+S</kbd>
-      `;
-    }
-    showToast('Network error while saving: ' + err.message, 'error');
-    return false;
+    statusText.textContent = 'Save failed';
+    showToast('Error saving: ' + err.message, 'error');
   }
 }
 
-// Quick save from overview & topbar
-if (btnQuickPublish) btnQuickPublish.onclick = () => savePortfolioData();
-if (btnPublish) btnPublish.onclick = () => savePortfolioData();
+// Bind save buttons
+btnPublish.onclick = savePortfolioData;
+btnQuickPublish.onclick = savePortfolioData;
 
-// File Picker Logic
-function handleFileSelection(file) {
-  if (!file) return;
-  if (!file.name.endsWith('.json')) {
-    showToast('Please select a valid .json file', 'error');
-    return;
+// Ctrl+S / Cmd+S shortcut
+window.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+    e.preventDefault();
+    savePortfolioData();
   }
+});
+
+// JSON Import / Export
+function handleJsonFile(file) {
+  if (!file) return;
+  filePickerStatus.textContent = `Reading ${file.name}...`;
   const reader = new FileReader();
-  reader.onload = (e) => {
+  reader.onload = e => {
     try {
       const parsed = JSON.parse(e.target.result);
-      if (!parsed || typeof parsed !== 'object') {
-        throw new Error('JSON file must contain an object');
-      }
       currentData = parsed;
       populateAllForms();
-      if (filePickerStatus) {
-        filePickerStatus.textContent = `✓ Loaded: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
-        filePickerStatus.style.color = '#3fb950';
-      }
-      showToast(`✓ Loaded "${file.name}" into dashboard! Review and click Save Changes when ready.`, 'success', 5000);
+      filePickerStatus.textContent = `Loaded ${file.name}`;
+      showToast(`Loaded ${file.name}. Review and click Save Changes.`);
     } catch (err) {
-      showToast('Error parsing JSON file: ' + err.message, 'error');
-      if (filePickerStatus) {
-        filePickerStatus.textContent = `Error: ${err.message}`;
-        filePickerStatus.style.color = '#f85149';
-      }
+      filePickerStatus.textContent = 'Error parsing JSON file';
+      showToast('Invalid JSON file: ' + err.message, 'error');
     }
   };
   reader.readAsText(file);
 }
 
-if (btnPickJson && jsonFileInput) {
-  btnPickJson.onclick = () => jsonFileInput.click();
-  jsonFileInput.onchange = (e) => handleFileSelection(e.target.files[0]);
-}
+btnPickJson.onclick = () => jsonFileInput.click();
+btnPickJsonTop.onclick = () => jsonFileInputTop.click();
+jsonFileInput.onchange = e => handleJsonFile(e.target.files[0]);
+jsonFileInputTop.onchange = e => handleJsonFile(e.target.files[0]);
 
-if (btnPickJsonTop && jsonFileInputTop) {
-  btnPickJsonTop.onclick = () => jsonFileInputTop.click();
-  jsonFileInputTop.onchange = (e) => handleFileSelection(e.target.files[0]);
-}
+btnDownloadJson.onclick = () => {
+  collectFormData();
+  const blob = new Blob([JSON.stringify(currentData, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `portfolio-data-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
 
-if (btnDownloadJson) {
-  btnDownloadJson.onclick = () => {
-    collectFormData();
-    const blob = new Blob([JSON.stringify(currentData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'portfolio-data.json';
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast('✓ Downloaded portfolio-data.json backup', 'success');
-  };
-}
-
-// Raw JSON actions
+// Raw JSON Tab Actions
 btnFormatJson.onclick = () => {
   try {
-    const parsed = JSON.parse(rawJsonTextarea.value);
-    rawJsonTextarea.value = JSON.stringify(parsed, null, 2);
+    const obj = JSON.parse(rawJsonTextarea.value);
+    rawJsonTextarea.value = JSON.stringify(obj, null, 2);
     jsonValidationMsg.textContent = 'Valid JSON formatted';
     jsonValidationMsg.style.color = '#3fb950';
-  } catch (e) {
-    jsonValidationMsg.textContent = 'Syntax Error: ' + e.message;
+  } catch (err) {
+    jsonValidationMsg.textContent = 'JSON Syntax Error: ' + err.message;
     jsonValidationMsg.style.color = '#f85149';
   }
 };
@@ -1186,49 +722,24 @@ btnFormatJson.onclick = () => {
 btnValidateJson.onclick = () => {
   try {
     JSON.parse(rawJsonTextarea.value);
-    jsonValidationMsg.textContent = '✓ Valid JSON syntax';
+    jsonValidationMsg.textContent = 'JSON is valid!';
     jsonValidationMsg.style.color = '#3fb950';
-    showToast('✓ JSON is completely valid', 'success');
-  } catch (e) {
-    jsonValidationMsg.textContent = 'Syntax Error: ' + e.message;
+  } catch (err) {
+    jsonValidationMsg.textContent = 'JSON Syntax Error: ' + err.message;
     jsonValidationMsg.style.color = '#f85149';
-    showToast('Invalid JSON: ' + e.message, 'error');
   }
 };
 
-btnSaveRaw.onclick = () => savePortfolioData('✓ Saved raw JSON to portfolio-data.json!');
-
-// Keyboard Shortcut: Ctrl+S / Cmd+S to Save Changes
-window.addEventListener('keydown', (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-    e.preventDefault();
-    savePortfolioData();
+btnSaveRaw.onclick = async () => {
+  try {
+    const parsed = JSON.parse(rawJsonTextarea.value);
+    currentData = parsed;
+    await savePortfolioData();
+    populateAllForms();
+  } catch (err) {
+    showToast('Cannot save invalid JSON: ' + err.message, 'error');
   }
-});
+};
 
-// Auto-refresh data when returning to tab or when updated elsewhere
-window.addEventListener('storage', (e) => {
-  if (e.key === 'portfolio_last_updated') {
-    loadPortfolioData();
-    showToast('Portfolio data synchronized', 'success', 3000);
-  }
-});
-
-window.addEventListener('focus', () => {
-  // Silent refresh if data updated elsewhere
-  fetch('/api/portfolio')
-    .then(r => r.json())
-    .then(json => {
-      if (json.data && JSON.stringify(json.data) !== JSON.stringify(currentData)) {
-        currentData = json.data;
-        populateAllForms();
-        if (json.lastModified && overviewLastMod) {
-          overviewLastMod.textContent = new Date(json.lastModified).toLocaleString();
-        }
-      }
-    })
-    .catch(() => {});
-});
-
-// Initialize on page load
+// Initial load
 loadPortfolioData();
