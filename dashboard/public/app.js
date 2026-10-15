@@ -12,11 +12,6 @@ const btnPickJson = document.getElementById('btnPickJson');
 const btnPickJsonTop = document.getElementById('btnPickJsonTop');
 const btnDownloadJson = document.getElementById('btnDownloadJson');
 const filePickerStatus = document.getElementById('filePickerStatus');
-const btnSaveRaw = document.getElementById('btnSaveRaw');
-const btnFormatJson = document.getElementById('btnFormatJson');
-const btnValidateJson = document.getElementById('btnValidateJson');
-const rawJsonTextarea = document.getElementById('rawJsonTextarea');
-const jsonValidationMsg = document.getElementById('jsonValidationMsg');
 const overviewLastMod = document.getElementById('overviewLastMod');
 const statusText = document.getElementById('statusText');
 const toastContainer = document.getElementById('toastContainer');
@@ -44,12 +39,6 @@ navItems.forEach(item => {
     item.classList.add('active');
     const pane = document.getElementById(targetTab);
     if (pane) pane.classList.add('active');
-
-    // If switching to raw JSON tab, update textarea with current state
-    if (targetTab === 'tab-raw') {
-      collectFormData();
-      rawJsonTextarea.value = JSON.stringify(currentData, null, 2);
-    }
   });
 });
 
@@ -108,9 +97,6 @@ function populateAllForms() {
 
   // 6. Experience & Education
   renderExpEduService();
-
-  // Raw JSON
-  rawJsonTextarea.value = JSON.stringify(currentData, null, 2);
 }
 
 // --- RENDER HELPERS ---
@@ -704,41 +690,6 @@ btnDownloadJson.onclick = () => {
   a.download = `portfolio-data-${new Date().toISOString().split('T')[0]}.json`;
   a.click();
   URL.revokeObjectURL(url);
-};
-
-// Raw JSON Tab Actions
-btnFormatJson.onclick = () => {
-  try {
-    const obj = JSON.parse(rawJsonTextarea.value);
-    rawJsonTextarea.value = JSON.stringify(obj, null, 2);
-    jsonValidationMsg.textContent = 'Valid JSON formatted';
-    jsonValidationMsg.style.color = '#3fb950';
-  } catch (err) {
-    jsonValidationMsg.textContent = 'JSON Syntax Error: ' + err.message;
-    jsonValidationMsg.style.color = '#f85149';
-  }
-};
-
-btnValidateJson.onclick = () => {
-  try {
-    JSON.parse(rawJsonTextarea.value);
-    jsonValidationMsg.textContent = 'JSON is valid!';
-    jsonValidationMsg.style.color = '#3fb950';
-  } catch (err) {
-    jsonValidationMsg.textContent = 'JSON Syntax Error: ' + err.message;
-    jsonValidationMsg.style.color = '#f85149';
-  }
-};
-
-btnSaveRaw.onclick = async () => {
-  try {
-    const parsed = JSON.parse(rawJsonTextarea.value);
-    currentData = parsed;
-    await savePortfolioData();
-    populateAllForms();
-  } catch (err) {
-    showToast('Cannot save invalid JSON: ' + err.message, 'error');
-  }
 };
 
 // Initial load

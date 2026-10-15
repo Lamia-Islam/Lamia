@@ -72,12 +72,6 @@
           <button class="nav-item" data-tab="tab-exp">
             <span class="nav-icon">💼</span> Experience &amp; Education
           </button>
-          
-          <div class="sidebar-divider"></div>
-          <div class="sidebar-section-title">ADVANCED</div>
-          <button class="nav-item" data-tab="tab-raw">
-            <span class="nav-icon">{ }</span> Raw JSON Editor
-          </button>
         </nav>
       </aside>
 
@@ -319,27 +313,6 @@
           </div>
           <div id="serviceContainer" class="space-y-3">
             <!-- Dynamically populated service items -->
-          </div>
-        </section>
-
-        <!-- Tab: Raw JSON Editor -->
-        <section class="tab-pane" id="tab-raw">
-          <div class="pane-header flex-between">
-            <div>
-              <h2>Raw JSON Editor</h2>
-              <p class="subtitle">Directly edit <code>src/data/portfolio-data.json</code>.</p>
-            </div>
-            <div class="flex gap-2">
-              <button type="button" class="btn btn-secondary btn-sm" id="btnFormatJson">Format JSON</button>
-              <button type="button" class="btn btn-secondary btn-sm" id="btnValidateJson">Validate</button>
-              <button type="button" class="btn btn-primary btn-sm" id="btnSaveRaw">Save JSON</button>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              <textarea id="rawJsonTextarea" class="code-textarea" rows="24" spellcheck="false"></textarea>
-              <div id="jsonValidationMsg" class="mt-2 text-sm"></div>
-            </div>
           </div>
         </section>
 
