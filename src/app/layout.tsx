@@ -1,43 +1,34 @@
 import type { Metadata } from "next";
-import { Inter, Lora } from "next/font/google";
-import "./globals.css";
+import { Fraunces, Instrument_Sans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-sans",
+const fraunces = Fraunces({
+  variable: "--display",
   subsets: ["latin"],
   display: "swap",
+  axes: ["opsz"],
 });
 
-const lora = Lora({
-  variable: "--font-serif",
+const instrumentSans = Instrument_Sans({
+  variable: "--sans",
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "Lamia Islam | Machine Learning & Robotics Researcher",
+  title: "Lamia Islam",
   description:
-    "Portfolio of Lamia Islam. Machine learning researcher building reliable AI for human-state sensing and robotics. B.Sc. in ICE from PUST. ML Engineering Intern at FlyRank AI.",
-  keywords: [
-    "Lamia Islam",
-    "Machine Learning Researcher",
-    "Robotics",
-    "Affective Computing",
-    "Driver-State Monitoring",
-    "ROS 2",
-    "Out-of-Distribution Detection",
-    "PUST",
-    "FlyRank AI",
-  ],
-  authors: [{ name: "Lamia Islam" }],
+    "Lamia Islam, ICE graduate from Pabna University of Science and Technology. AI safety for systems that act in the real world. Applying for PhD positions for 2027.",
   openGraph: {
-    title: "Lamia Islam | Machine Learning & Robotics Researcher",
+    title: "Lamia Islam",
     description:
-      "Machine learning researcher building reliable AI for human-state sensing and robotics.",
+      "AI safety for systems that act in the real world: how a model can tell when it should not be trusted, and what a robot or vehicle should do when that happens.",
     type: "website",
-    locale: "en_US",
+  },
+  icons: {
+    icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='32' font-weight='700' fill='%23fff' text-anchor='middle'%3ELI%3C/text%3E%3C/svg%3E",
   },
 };
 
@@ -47,17 +38,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${lora.variable}`}>
-      <body className="min-h-screen bg-background text-foreground font-sans antialiased selection:bg-neutral-200 dark:selection:bg-neutral-800 flex flex-col">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${fraunces.variable} ${instrumentSans.variable}`}
+    >
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider delay={200}>
-            {children}
-          </TooltipProvider>
+          {children}
         </ThemeProvider>
       </body>
     </html>

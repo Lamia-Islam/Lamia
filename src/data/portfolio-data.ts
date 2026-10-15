@@ -1,14 +1,18 @@
 import portfolioDataJson from "./portfolio-data.json";
 
 export interface ProjectDetail {
+  num?: string;
   slug: string;
   title: string;
-  shortTitle: string;
-  year: string;
-  summary: string;
-  problem: string;
-  whatBuilt: string[];
-  keyResults: string[];
+  shortTitle?: string;
+  sub?: string;
+  year?: string;
+  summary?: string;
+  problem?: string;
+  body?: string;
+  result?: string;
+  whatBuilt?: string[];
+  keyResults?: string[];
   thesisDetails?: {
     title: string;
     defended: string;
@@ -20,74 +24,47 @@ export interface ProjectDetail {
     venue: string;
     doiUrl?: string;
   }[];
-  techTags: string[];
-  links: {
+  links?: {
     label: string;
     url: string;
-    type: 'paper' | 'preprint' | 'code' | 'external';
+    type?: string;
   }[];
-  figureCaption: string;
+  status?: string;
+  figureCaption?: string;
+  techTags?: string[];
 }
 
-export interface SmallerProject {
-  title: string;
-  description: string;
-  tags: string[];
-  publication?: string;
-  doi?: string;
+export interface NewsItem {
+  date: string;
+  datetime: string;
+  text: string;
 }
 
 export interface PublicationItem {
-  id: string;
-  category: 'Journal' | 'Conference' | 'Submitted' | 'Preprint' | 'Presentation';
+  id?: string;
   authors: string;
+  boldAuthor?: string;
   title: string;
   venue: string;
-  dateOrYear: string;
-  doi?: string;
-  url?: string;
-  note?: string;
+  doiUrl?: string;
+  doiDisplay?: string;
 }
 
 export interface ExperienceItem {
-  title: string;
-  organization: string;
-  location: string;
+  role: string;
+  org: string;
   period: string;
-  supervisorOrMentor?: string;
-  bullets: string[];
 }
 
 export interface EducationItem {
   degree: string;
   institution: string;
   period: string;
-  grade: string;
-  details?: string;
-  thesis?: string;
 }
 
-export interface SkillCategory {
-  category: string;
-  skills: string[];
-}
-
-export interface ResearchInterest {
-  title: string;
-  summary: string;
-  tags: string[];
-}
-
-export interface AcademicServiceItem {
+export interface ServiceItem {
   role: string;
-  organization: string;
-  description: string;
-}
-
-export interface HonorCertificationItem {
-  title: string;
-  issuer: string;
-  description: string;
+  venue: string;
 }
 
 export interface PortfolioData {
@@ -98,35 +75,35 @@ export interface PortfolioData {
     location: string;
     email: string;
     cvPath: string;
+    contactNote: string;
     socialLinks: {
       email: string;
+      scholar: string;
       github: string;
       linkedin: string;
-      scholar: string;
-      researchgate: string;
       orcid: string;
     };
-    contactNote: string;
   };
-  stats: {
-    value: string;
-    label: string;
-    highlight: string;
-  }[];
   about: {
-    openingQuestion: string;
+    lede: string;
     paragraphs: string[];
+    openingQuestion?: string;
   };
-  researchInterests: ResearchInterest[];
+  news: NewsItem[];
   featuredProjects: ProjectDetail[];
-  smallerProjects: SmallerProject[];
-  publications: PublicationItem[];
+  publications: {
+    underReview: PublicationItem[];
+    published: PublicationItem[];
+  };
   experience: ExperienceItem[];
   education: EducationItem[];
-  skills: SkillCategory[];
-  academicService: AcademicServiceItem[];
-  honorsAndCertifications: HonorCertificationItem[];
+  service: ServiceItem[];
+  stats?: { value: string; label: string; highlight: string }[];
+  researchInterests?: { title: string; summary: string; tags: string[] }[];
+  skills?: { category: string; skills: string[] }[];
+  academicService?: { role: string; organization: string; description: string }[];
+  honorsAndCertifications?: { title: string; issuer: string; description: string }[];
+  smallerProjects?: { title: string; description: string; tags: string[]; publication?: string; doi?: string }[];
 }
 
-// Export the statically imported JSON data with strong typing
-export const PORTFOLIO_DATA: PortfolioData = portfolioDataJson as PortfolioData;
+export const PORTFOLIO_DATA: PortfolioData = portfolioDataJson as unknown as PortfolioData;
