@@ -11,8 +11,8 @@
   --btn-bg: #111111;
   --btn-text: #ffffff;
   color-scheme: light;
-  --display: var(--display, "Fraunces", Georgia, "Times New Roman", serif);
-  --sans: var(--sans, "Instrument Sans", "Helvetica Neue", Arial, sans-serif);
+  --display: var(--font-display), Georgia, "Times New Roman", serif;
+  --sans: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
   --gutter: clamp(16px, 5vw, 64px);
   --max: 1180px;
 }
@@ -186,17 +186,12 @@ a:focus-visible {
 
 .hero h1 {
   font-family: var(--display);
-  font-weight: 600;
+  font-weight: 500;
   font-variation-settings: "opsz" 144;
-  font-size: clamp(56px, 9vw, 120px);
-  line-height: 0.88;
-  letter-spacing: -0.045em;
-  margin: 0 0 0 -0.04em;
-}
-
-.hero h1 em {
-  font-style: italic;
-  font-weight: 400;
+  font-size: clamp(44px, 7vw, 92px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0 0 clamp(20px, 3vw, 32px);
 }
 
 .statement {
@@ -574,19 +569,17 @@ section.block {
 }
 
 .contact .mail {
-  font-family: var(--display);
-  font-variation-settings: "opsz" 144;
-  font-size: clamp(28px, 6.4vw, 80px);
+  font-family: var(--sans);
+  font-size: clamp(18px, 1.8vw, 22px);
   font-weight: 500;
-  letter-spacing: -0.035em;
-  line-height: 1.05;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.12em;
+  line-height: 1.4;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
   word-break: break-word;
 }
 
 .contact .mail:hover {
-  text-decoration-thickness: 4px;
+  text-decoration-thickness: 2px;
 }
 
 footer {

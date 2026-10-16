@@ -4,14 +4,14 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const fraunces = Fraunces({
-  variable: "--display",
+  variable: "--font-display",
   subsets: ["latin"],
   display: "swap",
   axes: ["opsz"],
 });
 
 const instrumentSans = Instrument_Sans({
-  variable: "--sans",
+  variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600"],
