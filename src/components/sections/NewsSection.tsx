@@ -2,7 +2,9 @@ import React from "react";
 import { PORTFOLIO_DATA } from "@/data/portfolio-data";
 
 export function NewsSection() {
-  const { news } = PORTFOLIO_DATA;
+  const news = PORTFOLIO_DATA.news ?? [];
+
+  if (news.length === 0) return null;
 
   return (
     <section className="block" id="news">
