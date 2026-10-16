@@ -127,7 +127,16 @@
     "underReview": [
       {
         "id": "pub-ur-1",
-        "authors": "M. B. A. Z. Shammo, L. Islam, et al.",
+        "authors": "L. Islam, M. Einollahi Asgarabad.",
+        "boldAuthor": "L. Islam",
+        "title": "Site identity leaks through missingness: unsupervised competence monitoring under-detects shift in four cardiovascular cohorts.",
+        "venue": "Royal Society Open Science. Under review.",
+        "doiUrl": "https://doi.org/10.5281/zenodo.23205549",
+        "doiDisplay": "Code and data audit: doi.org/10.5281/zenodo.23205549"
+      },
+      {
+        "id": "pub-ur-2",
+        "authors": "M. B. A. Z. Shammo, T. Debnath, L. Islam, S. Sarker, J. Habib.",
         "boldAuthor": "L. Islam",
         "title": "Vision-Based Crack Segmentation and Coverage Planning for Autonomous Mobile Robots.",
         "venue": "International Journal of Intelligent Robotics and Applications (Springer). Revised version under review.",
