@@ -2,7 +2,7 @@
   "profile": {
     "name": "Lamia Islam",
     "headline": "ICE Graduate, Pabna University of Science and Technology",
-    "subline": "AI Safety \u00b7 Human-Centred AI \u00b7 Robotics",
+    "subline": "AI Safety · Human-Centred AI · Robotics",
     "location": "Bangladesh",
     "email": "lamiaislamzy@gmail.com",
     "cvPath": "/Lamia_Islam_CV.pdf",
@@ -16,11 +16,11 @@
     }
   },
   "about": {
-    "lede": "I build AI systems that recognise when they may be wrong about a person, act with care when they are, and learn from the mistake.",
+    "lede": "My research centres on reliable, interpretable and inclusive AI for systems that interact with people.",
     "paragraphs": [
-      "My undergraduate thesis began with a stress classifier trained on heart and skin signals from 15 laboratory volunteers. When I tested it on real drivers it had never seen, it read them with the same confidence it had in the lab. In a vehicle, a misreading is not just a wrong label but a wrong action taken on a person. Since no dataset can represent everyone a system will meet, I focused instead on how a model can recognise when someone falls outside what it has learned. I showed that a quantity the model already computes, and usually discards, can flag this at no additional cost.",
-      "I see this as both a safety problem and an inclusion problem. Even within the laboratory data, some individuals were never well described by a model trained on everyone else, and these are precisely the people a system is most likely to fail. My broader work follows the same concern for systems that act in the real world: a ROS 2 intervention controller that escalates gradually and keeps the driver in control, multi-robot search and rescue in collapsed buildings, autonomous crack inspection robots, and medical imaging benchmarks that rank methods misleadingly.",
-      "I am currently a Research Assistant at Pabna University of Science and Technology and a prospective PhD student for 2027."
+      "I have long been curious about why people perceive and respond to the same situation so differently. In AI, this becomes a practical question: how a model forms its judgement of a person, when that judgement can be trusted, and how the system should act when it cannot.",
+      "My work spans physiological signal modelling, uncertainty and out-of-distribution detection, medical image analysis, and multi-robot systems, with applications in healthcare and human-centred AI.",
+      "I am a Research Assistant at Pabna University of Science and Technology, Bangladesh, and am seeking PhD positions for 2027."
     ]
   },
   "featuredProjects": [
