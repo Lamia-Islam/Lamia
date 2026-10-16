@@ -34,12 +34,6 @@ export interface ProjectDetail {
   techTags?: string[];
 }
 
-export interface NewsItem {
-  date: string;
-  datetime: string;
-  text: string;
-}
-
 export interface PublicationItem {
   id?: string;
   authors: string;
@@ -89,7 +83,6 @@ export interface PortfolioData {
     paragraphs: string[];
     openingQuestion?: string;
   };
-  news: NewsItem[];
   featuredProjects: ProjectDetail[];
   publications: {
     underReview: PublicationItem[];
