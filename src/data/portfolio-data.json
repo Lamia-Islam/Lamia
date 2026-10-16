@@ -2,11 +2,11 @@
   "profile": {
     "name": "Lamia Islam",
     "headline": "ICE Graduate, Pabna University of Science and Technology",
-    "subline": "AI Safety \u00b7 Machine Learning \u00b7 Robotics",
+    "subline": "AI Safety \u00b7 Human-Centred AI \u00b7 Robotics",
     "location": "Bangladesh",
     "email": "lamiaislamzy@gmail.com",
     "cvPath": "/Lamia_Islam_CV.pdf",
-    "contactNote": "I am looking for PhD positions in AI safety and reliable machine learning. Email is the best way to reach me.",
+    "contactNote": "I am looking for PhD positions starting in 2027 in safe and inclusive AI: systems, from adaptive learning tools to robots and vehicles, that read people, know when that reading might be wrong, and act with care when it is. Email is the best way to reach me.",
     "socialLinks": {
       "email": "mailto:lamiaislamzy@gmail.com",
       "scholar": "https://scholar.google.com/citations?user=sFP7LL8AAAAJ",
@@ -16,78 +16,44 @@
     }
   },
   "about": {
-    "lede": "I work on AI safety for systems that act in the real world: how a model can tell when it should not be trusted, and what a robot or vehicle should do when that happens.",
+    "lede": "I build AI systems that recognise when they may be wrong about a person, act with care when they are, and learn from the mistake.",
     "paragraphs": [
-      "My undergraduate thesis built a driver-state monitor from wearable heart and skin signals that detects when real-road data no longer matches what it was trained on, at no extra computational cost, and hands control to a graded, human-overridable intervention in ROS 2. I have also worked on multi-robot search and rescue, and on why some medical imaging benchmarks give misleading results.",
-      "I am an ML Engineering Intern at FlyRank AI and a Research Assistant at PUST, and I am applying for PhD positions for 2027."
+      "My undergraduate thesis began with a stress classifier trained on heart and skin signals from 15 laboratory volunteers. When I tested it on real drivers it had never seen, it read them with the same confidence it had in the lab. In a vehicle, a misreading is not just a wrong label but a wrong action taken on a person. Since no dataset can represent everyone a system will meet, I focused instead on how a model can recognise when someone falls outside what it has learned. I showed that a quantity the model already computes, and usually discards, can flag this at no additional cost.",
+      "I see this as both a safety problem and an inclusion problem. Even within the laboratory data, some individuals were never well described by a model trained on everyone else, and these are precisely the people a system is most likely to fail. My broader work follows the same concern for systems that act in the real world: a ROS 2 intervention controller that escalates gradually and keeps the driver in control, multi-robot search and rescue in collapsed buildings, autonomous crack inspection robots, and medical imaging benchmarks that rank methods misleadingly.",
+      "I am currently a Research Assistant at Pabna University of Science and Technology and a prospective PhD student for 2027."
     ]
   },
-  "news": [
-    {
-      "date": "Sep 2026",
-      "datetime": "2026-09",
-      "text": "Defended my undergraduate thesis on competence-gated driver-state monitoring."
-    },
-    {
-      "date": "Sep 2026",
-      "datetime": "2026-09",
-      "text": "Invited as a reviewer for IEEE ICCIT 2026."
-    },
-    {
-      "date": "Aug 2026",
-      "datetime": "2026-08",
-      "text": "Submitted multi-robot search and rescue paper to IEEE ICCIT 2026."
-    },
-    {
-      "date": "Jul 2026",
-      "datetime": "2026-07",
-      "text": "Joined FlyRank AI as an ML Engineering Intern."
-    },
-    {
-      "date": "Apr 2026",
-      "datetime": "2026-04",
-      "text": "Paper published at IEEE QPAIN 2026."
-    }
-  ],
   "featuredProjects": [
     {
       "num": "01",
       "slug": "ndpai-driver-state-monitoring",
-      "title": "Knowing When a Wearable Model Should Not Be Trusted",
+      "title": "Design and Evaluation of a Competence-Gated Driver-State Monitoring System for Autonomous Intervention Control",
       "shortTitle": "Competence-Gated Driver State Monitoring",
-      "sub": "Undergraduate thesis, 2026",
+      "sub": "Undergraduate thesis, 2026. Supervisor: Dr. Md. Anwar Hossain",
       "year": "2026",
-      "summary": "Wearable-based driver-state monitoring with zero-cost OOD detection and graded ROS 2 intervention.",
-      "problem": "Stress classifiers trained in controlled lab environments fail silently under domain shifts on real roads.",
-      "body": "A stress classifier trained on lab data quietly fails on real roads. I showed that a value the model already computes and usually throws away (the raw marginal likelihood) reliably flags real-road data it was not trained on, with no extra cost, while keeping in-domain accuracy. The signal drives a graded, human-overridable intervention in a ROS 2 pipeline.",
-      "result": "detects unfamiliar real-road data with AUROC 0.966 on MIT DriveDB, where the normalised score used in the earlier version of the model could not (0.422). In-domain balanced accuracy 0.841.",
+      "summary": "A wearable stress model that notices when a person falls outside what it learned, and holds back before acting on them.",
+      "problem": "A model trained on lab volunteers reads real drivers it has never seen with the same confidence, and acting on a wrong reading means taking control away from a person.",
+      "body": "I built a density-based stress classifier from ECG and skin conductance, then placed it in a simulated vehicle in ROS 2 and Gazebo that could alert the driver, slow down, or stop. On real driving data from people it had never seen, scores built from the model's prediction ranked unfamiliar data worse than chance. The model's marginal log-evidence, which it already computes and normally throws away, did far better at no extra cost. Turning these scores into gates that hold back intervention showed something else: how well a score ranks unfamiliar data does not predict how its gate behaves, and the gate's behaviour is what a person actually experiences.",
+      "result": "",
       "whatBuilt": [
-        "Marginal likelihood competence monitor operating at zero additional inference overhead",
-        "ROS 2 Humble graded intervention controller with human override"
+        "Density-based physiological state classifier with a zero-cost competence monitor",
+        "ROS 2 graded intervention controller (alert, slow, stop) with human override"
       ],
-      "keyResults": [
-        "AUROC 0.966 on MIT DriveDB out-of-domain detection",
-        "0.841 balanced accuracy in-domain"
-      ],
+      "keyResults": [],
       "links": [
-        {
-          "label": "Preprint",
-          "url": "https://doi.org/10.21203/rs.3.rs-10237429/v2",
-          "type": "preprint"
-        },
         {
           "label": "Code",
           "url": "https://github.com/Lamia-Islam",
           "type": "code"
         }
       ],
-      "status": "Paper under review at Engineering Applications of Artificial Intelligence (Elsevier).",
+      "status": "Further experiments running; preparing for journal submission.",
       "figureCaption": "Schematic, not data. Lab and road data separate on a score the model already computes.",
       "techTags": [
-        "ROS 2",
         "OOD Detection",
-        "Active Inference",
-        "Wearables"
+        "Physiological Signals",
+        "Wearables",
+        "ROS 2"
       ]
     },
     {
@@ -161,10 +127,12 @@
     "underReview": [
       {
         "id": "pub-ur-1",
-        "authors": "L. Islam, M. A. Hossain.",
+        "authors": "M. B. A. Z. Shammo, L. Islam, et al.",
         "boldAuthor": "L. Islam",
-        "title": "The discarded denominator: marginal likelihood as a zero-cost competence monitor for wearable driver-state classifiers under domain shift.",
-        "venue": "Engineering Applications of Artificial Intelligence (Elsevier)."
+        "title": "Vision-Based Crack Segmentation and Coverage Planning for Autonomous Mobile Robots.",
+        "venue": "International Journal of Intelligent Robotics and Applications (Springer). Revised version under review.",
+        "doiUrl": "https://www.researchsquare.com/article/rs-9996410",
+        "doiDisplay": "Preprint: researchsquare.com/article/rs-9996410"
       }
     ],
     "published": [
@@ -208,11 +176,6 @@
   },
   "experience": [
     {
-      "role": "ML Engineering Intern",
-      "org": "FlyRank AI (remote)",
-      "period": "Jul 2026 - Present"
-    },
-    {
       "role": "Research Assistant",
       "org": "Dept. of ICE, PUST",
       "period": "2024 - Present"
@@ -229,6 +192,10 @@
     {
       "role": "Reviewer",
       "venue": "IEEE ICCIT 2026, IEEE RAAICON 2025 and 2026"
+    },
+    {
+      "role": "Robotics Secretary",
+      "venue": "ICE Association, Pabna University of Science and Technology"
     }
   ]
 }
