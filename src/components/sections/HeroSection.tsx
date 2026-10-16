@@ -7,10 +7,7 @@ export function HeroSection() {
   return (
     <header className="hero" id="top">
       <div className="wrap">
-        <h1>
-          Lamia<br />
-          <em>Islam</em>
-        </h1>
+        <h1>Lamia Islam</h1>
       </div>
       <div className="wrap">
         <div className="band" role="presentation"></div>
