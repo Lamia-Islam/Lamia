@@ -117,13 +117,7 @@
         "Rank agreement between clinical datasets is organised by modality",
         "Pooling untrained with trained methods inflates agreement from 0.13 to 0.80"
       ],
-      "links": [
-        {
-          "label": "Earlier preprint",
-          "url": "https://doi.org/10.21203/rs.3.rs-10362132/v1",
-          "type": "preprint"
-        }
-      ],
+      "links": [],
       "status": "Under review at the Journal of Imaging Informatics in Medicine (Springer), with Prof. Dr. Md. Sarwar Hosain.",
       "figureCaption": "Schematic, not data. Same methods, ranked top to bottom. Synthetic rankings flip; clinical rankings agree.",
       "techTags": [
