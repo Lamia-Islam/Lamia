@@ -33,6 +33,16 @@ export function PublicationsSection() {
                     {formatAuthors(pub.authors, pub.boldAuthor || "L. Islam")}
                     <span className="t">{pub.title}</span>
                     <span className="venue">{pub.venue}</span>
+                    {pub.doiUrl && (
+                      <a
+                        href={pub.doiUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ display: "inline-block", marginTop: "2px" }}
+                      >
+                        {pub.doiDisplay || pub.doiUrl.replace(/^https?:\/\//, "")}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
