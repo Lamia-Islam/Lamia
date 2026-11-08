@@ -2,7 +2,7 @@
   "profile": {
     "name": "Lamia Islam",
     "headline": "ICE Graduate, Pabna University of Science and Technology",
-    "subline": "AI Safety · Human-Centred AI · Robotics",
+    "subline": "Reliable ML · Out-of-Distribution Detection · Evaluation Validity",
     "location": "Bangladesh",
     "email": "lamiaislamzy@gmail.com",
     "cvPath": "/Lamia_Islam_CV.pdf",
@@ -29,7 +29,7 @@
       "slug": "ndpai-driver-state-monitoring",
       "title": "Design and Evaluation of a Competence-Gated Driver-State Monitoring System for Autonomous Intervention Control",
       "shortTitle": "Competence-Gated Driver State Monitoring",
-      "sub": "Undergraduate thesis, 2026. Supervisor: Dr. Md. Anwar Hossain",
+      "sub": "Undergraduate thesis, 2026. Supervisor: Prof. Dr. Md. Anwar Hossain",
       "year": "2026",
       "summary": "A wearable stress model that notices when a person falls outside what it learned, and holds back before acting on them.",
       "problem": "A model trained on lab volunteers reads real drivers it has never seen with the same confidence, and acting on a wrong reading means taking control away from a person.",
@@ -39,7 +39,12 @@
         "Density-based physiological state classifier with a zero-cost competence monitor",
         "ROS 2 graded intervention controller (alert, slow, stop) with human override"
       ],
-      "keyResults": [],
+      "keyResults": [
+        "Balanced accuracy 0.84 on WESAD (15 participants, leave-one-subject-out)",
+        "On real driving recordings from unseen people (MIT DriveDB), posterior-based confidence scores ranked driving data as more familiar than training data (AUROC 0.36 to 0.46); the model's marginal log-evidence ranked it correctly (AUROC 0.77 to 0.84) at no extra cost",
+        "As a gate on intervention, the best-ranked score held back escalation in 96% of driving windows, against 54% for the classifier's own score",
+        "Caught a scale artifact between datasets that inflated detection before reporting"
+      ],
       "links": [
         {
           "label": "Code",
@@ -47,14 +52,19 @@
           "type": "code"
         }
       ],
-      "status": "Further experiments running; preparing for journal submission.",
+      "status": "Sole-author manuscript under review at SN Computer Science (Springer).",
       "figureCaption": "Schematic, not data. Lab and road data separate on a score the model already computes.",
       "techTags": [
         "OOD Detection",
         "Physiological Signals",
         "Wearables",
         "ROS 2"
-      ]
+      ],
+      "thesisDetails": {
+        "title": "Design and Evaluation of a Competence-Gated Driver-State Monitoring System for Autonomous Intervention Control",
+        "defended": "2 September 2026",
+        "supervisor": "Prof. Dr. Md. Anwar Hossain"
+      }
     },
     {
       "num": "02",
@@ -65,10 +75,10 @@
       "year": "2026",
       "summary": "Multi-robot collaborative exploration in ROS 2 and Gazebo with path-aware victim priors.",
       "problem": "Standard Euclidean belief propagation spreads probability mass through impassable rubble walls.",
-      "body": "Three robots map a collapsed building together in ROS 2 and Gazebo and share a belief map of where victims are likely to be. I found that this victim prior helps in open space but misleads the robots in rubble, because it spreads belief through walls, and that a path-aware (geodesic) version partly fixes it.",
+      "body": "Three differential-drive robots map a collapsed building together in ROS 2 Humble and Gazebo Fortress, using slam_toolbox mapping, a custom map-merge node, a wavefront BFS coordinator with Hungarian frontier assignment, a pure-pursuit controller, and a shared Gaussian belief map of where survivors are likely to be. I found that this belief helps in open space but misleads the robots in rubble, because it spreads through walls, and that a path-aware (geodesic) version partly corrects it.",
       "whatBuilt": [
-        "Collaborative multi-robot mapping and victim prior fusion pipeline in ROS 2",
-        "Geodesic path-aware metric to prevent probability leakage through walls"
+        "Collaborative multi-robot mapping with a custom map-merge node and Hungarian frontier assignment in ROS 2",
+        "Shared Gaussian survivor belief map, plus a geodesic path-aware version that respects walls"
       ],
       "keyResults": [
         "Prevents false exploration behind impassable walls in Gazebo Fortress simulations"
@@ -92,28 +102,29 @@
     {
       "num": "03",
       "slug": "synthetic-wound-segmentation-benchmarks",
-      "title": "When Benchmarks Mislead: Wound Segmentation",
-      "shortTitle": "Synthetic Benchmark Rank Correlation",
+      "title": "When Benchmarks Mislead: Medical Image Segmentation",
+      "shortTitle": "Benchmark Validity in Medical Segmentation",
       "sub": "2026",
       "year": "2026",
-      "summary": "Investigating ranking inversions of segmentation architectures between synthetic and clinical benchmarks.",
-      "problem": "Synthetic medical imaging benchmarks frequently fail to reflect true clinical ranking order.",
-      "body": "Two synthetic benchmarks ranked the same 22 segmentation methods in opposite orders, while two real clinical datasets agreed with each other. Background texture turned out to decide whether a synthetic benchmark can be trusted.",
+      "summary": "Testing whether segmentation benchmarks agree with each other, across 57 methods and 11 clinical datasets in four modalities.",
+      "problem": "A benchmark is only useful if its rankings carry over to other data, but how well it seems to do that can depend on which methods it is tested with.",
+      "body": "I scored 57 segmentation methods, including ImageNet-pretrained architectures and nnU-Net, on 11 public clinical datasets and on synthetic wound benchmarks. Rank agreement between clinical datasets turned out to be organised by imaging modality. Pooling untrained methods with trained ones manufactures agreement (0.13 rising to 0.80), so a benchmark's measured validity depends on the methods it is tested with.",
       "whatBuilt": [
-        "Benchmarked 22 image segmentation models across synthetic and real clinical wound datasets",
-        "Correlation analysis uncovering texture discrepancy artifacts"
+        "Benchmark of 57 segmentation methods across 11 clinical datasets in four modalities and synthetic wound benchmarks",
+        "Rank-agreement analysis separating real agreement from agreement created by the method pool"
       ],
       "keyResults": [
-        "Uncovered rank inversion where synthetic datasets inversely correlate with clinical outcomes"
+        "Rank agreement between clinical datasets is organised by modality",
+        "Pooling untrained with trained methods inflates agreement from 0.13 to 0.80"
       ],
       "links": [
         {
-          "label": "Preprint",
+          "label": "Earlier preprint",
           "url": "https://doi.org/10.21203/rs.3.rs-10362132/v1",
           "type": "preprint"
         }
       ],
-      "status": "",
+      "status": "Under review at the Journal of Imaging Informatics in Medicine (Springer), with Prof. Dr. Md. Sarwar Hosain.",
       "figureCaption": "Schematic, not data. Same methods, ranked top to bottom. Synthetic rankings flip; clinical rankings agree.",
       "techTags": [
         "Computer Vision",
@@ -130,18 +141,32 @@
         "authors": "L. Islam, M. Einollahi Asgarabad.",
         "boldAuthor": "L. Islam",
         "title": "Site identity leaks through missingness: unsupervised competence monitoring under-detects shift in four cardiovascular cohorts.",
-        "venue": "Royal Society Open Science. Under review.",
+        "venue": "Royal Society Open Science. Submitted Oct 2026.",
         "doiUrl": "https://doi.org/10.5281/zenodo.23205549",
-        "doiDisplay": "Code and data audit: doi.org/10.5281/zenodo.23205549"
+        "doiDisplay": "Code and audit: doi.org/10.5281/zenodo.23205549"
       },
       {
         "id": "pub-ur-2",
+        "authors": "L. Islam.",
+        "boldAuthor": "L. Islam",
+        "title": "Thresholds set on training data understate the false alarms of competence gates for a wearable driver-state monitor.",
+        "venue": "SN Computer Science (Springer). Submitted Oct 2026."
+      },
+      {
+        "id": "pub-ur-3",
+        "authors": "L. Islam, M. S. Hosain.",
+        "boldAuthor": "L. Islam",
+        "title": "Synthetic benchmark validity in medical image segmentation.",
+        "venue": "Journal of Imaging Informatics in Medicine (Springer). Submitted Oct 2026."
+      },
+      {
+        "id": "pub-ur-4",
         "authors": "M. B. A. Z. Shammo, T. Debnath, L. Islam, S. Sarker, J. Habib.",
         "boldAuthor": "L. Islam",
-        "title": "Vision-Based Crack Segmentation and Coverage Planning for Autonomous Mobile Robots.",
-        "venue": "International Journal of Intelligent Robotics and Applications (Springer). Revised version under review.",
-        "doiUrl": "https://www.researchsquare.com/article/rs-9996410",
-        "doiDisplay": "Preprint: researchsquare.com/article/rs-9996410"
+        "title": "Vision-based crack segmentation and coverage planning for autonomous mobile robots.",
+        "venue": "International Journal of Intelligent Robotics and Applications (Springer). Revision submitted Sep 2026.",
+        "doiUrl": "https://doi.org/10.21203/rs.3.rs-9996410/v1",
+        "doiDisplay": "Preprint: doi.org/10.21203/rs.3.rs-9996410/v1"
       }
     ],
     "published": [
@@ -150,7 +175,7 @@
         "authors": "L. Islam, M. B. A. Z. Shammo, M. I. Hossain.",
         "boldAuthor": "L. Islam",
         "title": "Real-Time RFID Authentication and Access Control System with Networked Logging.",
-        "venue": "IEEE QPAIN 2026.",
+        "venue": "IEEE QPAIN, Chattogram, Apr 2026.",
         "doiUrl": "https://doi.org/10.1109/QPAIN69676.2026.11546467",
         "doiDisplay": "doi.org/10.1109/QPAIN69676.2026.11546467"
       },
@@ -159,7 +184,7 @@
         "authors": "M. B. A. Z. Shammo, L. Islam, et al.",
         "boldAuthor": "L. Islam",
         "title": "Machine Learning-Based Hepatitis C Detection Using Ensemble Boosting.",
-        "venue": "Springer BIM 2026.",
+        "venue": "3rd Int. Conf. on Big Data, IoT and Machine Learning, Springer Nature, Apr 2026.",
         "doiUrl": "https://doi.org/10.1007/978-3-032-15764-5_50",
         "doiDisplay": "doi.org/10.1007/978-3-032-15764-5_50"
       },
@@ -168,7 +193,7 @@
         "authors": "M. A. Miya, et al., L. Islam.",
         "boldAuthor": "L. Islam",
         "title": "Remote Health Monitoring via PPG Signal Processing and Machine Learning Using Mobile Devices.",
-        "venue": "IEEE ICCIT 2025.",
+        "venue": "IEEE ICCIT, Cox's Bazar, Dec 2025.",
         "doiUrl": "https://doi.org/10.1109/ICCIT68739.2025.11491546",
         "doiDisplay": "doi.org/10.1109/ICCIT68739.2025.11491546"
       },
@@ -176,8 +201,8 @@
         "id": "pub-4",
         "authors": "L. Islam, M. B. A. Z. Shammo, et al.",
         "boldAuthor": "L. Islam",
-        "title": "Machine Learning-Based Prediction of Nightmares in Children.",
-        "venue": "IEEE COMPAS 2025.",
+        "title": "Machine Learning-Based Prediction of Nightmares in Children: A Pediatric Psychological Integration.",
+        "venue": "IEEE COMPAS, Kushtia, 2025.",
         "doiUrl": "https://doi.org/10.1109/COMPAS67506.2025.11381639",
         "doiDisplay": "doi.org/10.1109/COMPAS67506.2025.11381639"
       }
@@ -186,25 +211,45 @@
   "experience": [
     {
       "role": "Research Assistant",
-      "org": "Dept. of ICE, PUST",
-      "period": "2024 - Present"
+      "org": "Dept. of ICE, PUST · Supervisor: Prof. Dr. Md. Anwar Hossain",
+      "period": "2026 - Present"
+    },
+    {
+      "role": "Research Assistant",
+      "org": "Dept. of ICE, PUST · Supervisor: Dr. Md. Imran Hossain",
+      "period": "2024 - Mar 2026"
     }
   ],
   "education": [
     {
-      "degree": "B.Sc. in Information and Communication Engineering",
-      "institution": "Pabna University of Science and Technology",
-      "period": "2026"
+      "degree": "B.Sc. (Engineering) in Information and Communication Engineering",
+      "institution": "Pabna University of Science and Technology · CGPA 3.34/4.00, final two semesters 3.77/4.00",
+      "period": "Feb 2022 - Aug 2026"
+    },
+    {
+      "degree": "IELTS Academic: Overall 7.5 (CEFR C1)",
+      "institution": "Listening 7.5 · Reading 8.5 · Writing 6.5 · Speaking 7.5",
+      "period": "Nov 2026"
+    },
+    {
+      "degree": "HSC (Science), GPA 5.00/5.00",
+      "institution": "Higher Secondary Certificate",
+      "period": "2020"
+    },
+    {
+      "degree": "SSC (Science), GPA 5.00/5.00",
+      "institution": "Secondary School Certificate",
+      "period": "2018"
     }
   ],
   "service": [
     {
-      "role": "Reviewer",
-      "venue": "IEEE ICCIT 2026, IEEE RAAICON 2025 and 2026"
+      "role": "Peer Reviewer",
+      "venue": "IEEE RAAICON 2025 and 2026"
     },
     {
       "role": "Robotics Secretary",
-      "venue": "ICE Association, Pabna University of Science and Technology"
+      "venue": "ICE Association, Pabna University of Science and Technology (Oct 2025 - 2026)"
     }
   ]
 }
