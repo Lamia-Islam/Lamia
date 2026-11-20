@@ -132,6 +132,49 @@ export function WoundBenchmarkDiagram() {
   );
 }
 
+export function TutorGateDiagram() {
+  return (
+    <svg viewBox="0 0 400 260" role="img" aria-labelledby="f4t">
+      <title id="f4t">
+        Schematic: a tutor reads a learner&apos;s first five answers; a gate on how well it fitted those answers either lets it keep predicting or, in the planned next study, asks the learner.
+      </title>
+      <rect x="18" y="62" width="186" height="56" fill="var(--rule)" opacity="0.5" />
+      <g fontFamily="var(--sans), Instrument Sans, Arial, sans-serif" fontSize="15" fill="var(--ink)">
+        <text x="111" y="48" textAnchor="middle">first five answers</text>
+        <text x="231" y="26" textAnchor="middle" fontWeight="600">gate</text>
+      </g>
+      <g stroke="var(--ink)" strokeWidth="2">
+        <circle cx="40" cy="90" r="8" fill="var(--ink)" />
+        <circle cx="76" cy="90" r="8" fill="none" />
+        <circle cx="112" cy="90" r="8" fill="var(--ink)" />
+        <circle cx="148" cy="90" r="8" fill="none" />
+        <circle cx="184" cy="90" r="8" fill="none" />
+      </g>
+      <rect x="226" y="36" width="10" height="110" fill="var(--ink)" />
+      <g fontFamily="var(--sans), Instrument Sans, Arial, sans-serif" fontSize="15" fill="var(--ink-2)">
+        <text x="18" y="142">how well the tutor fitted them</text>
+      </g>
+      <g fill="none" stroke="var(--ink)" strokeWidth="2">
+        <path d="M236 70 L300 70" />
+        <path d="M236 120 L256 120 L256 210 L262 210" />
+      </g>
+      <path d="M300 64 L312 70 L300 76 Z" fill="var(--ink)" />
+      <path d="M262 204 L274 210 L262 216 Z" fill="var(--ink)" />
+      <g fontFamily="var(--sans), Instrument Sans, Arial, sans-serif" fontSize="15" fill="var(--ink)">
+        <text x="316" y="66">keep</text>
+        <text x="316" y="84">predicting</text>
+      </g>
+      <rect x="278" y="192" width="116" height="36" fill="none" stroke="var(--ink)" strokeWidth="2" strokeDasharray="6 5" />
+      <text x="336" y="215" fontFamily="var(--sans), Instrument Sans, Arial, sans-serif" fontSize="15" fill="var(--ink)" textAnchor="middle" fontWeight="500">
+        ask the learner
+      </text>
+      <text x="336" y="246" fontFamily="var(--sans), Instrument Sans, Arial, sans-serif" fontSize="13" fill="var(--ink-2)" textAnchor="middle">
+        next study
+      </text>
+    </svg>
+  );
+}
+
 // Aliases for compatibility
 export const NDPAIDiagram = ThesisGateDiagram;
 export const MultiRobotDiagram = MultiRobotBeliefDiagram;

@@ -4,6 +4,7 @@ import {
   ThesisGateDiagram,
   MultiRobotBeliefDiagram,
   WoundBenchmarkDiagram,
+  TutorGateDiagram,
 } from "@/components/projects/ProjectDiagrams";
 
 export function FeaturedProjectsSection() {
@@ -17,6 +18,8 @@ export function FeaturedProjectsSection() {
         return <MultiRobotBeliefDiagram />;
       case "synthetic-wound-segmentation-benchmarks":
         return <WoundBenchmarkDiagram />;
+      case "tutor-competence-pilot":
+        return <TutorGateDiagram />;
       default:
         return null;
     }

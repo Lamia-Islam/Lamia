@@ -13,6 +13,7 @@ import {
   ThesisGateDiagram,
   MultiRobotBeliefDiagram,
   WoundBenchmarkDiagram,
+  TutorGateDiagram,
 } from "@/components/projects/ProjectDiagrams";
 
 export function generateStaticParams() {
@@ -41,6 +42,8 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         return <MultiRobotBeliefDiagram />;
       case "synthetic-wound-segmentation-benchmarks":
         return <WoundBenchmarkDiagram />;
+      case "tutor-competence-pilot":
+        return <TutorGateDiagram />;
       default:
         return null;
     }

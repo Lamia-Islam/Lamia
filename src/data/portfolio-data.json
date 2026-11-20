@@ -26,6 +26,42 @@
   "featuredProjects": [
     {
       "num": "01",
+      "slug": "tutor-competence-pilot",
+      "title": "Does an Adaptive Tutor Know When It Is Out of Its Depth?",
+      "shortTitle": "Tutor Competence Pilot",
+      "sub": "Independent pilot, November 2026, in progress",
+      "year": "2026",
+      "summary": "The same question as my earlier work, asked of a learner model: can a tutor tell from a learner's first answers that its reading of them is about to go wrong?",
+      "problem": "An adaptive tutor keeps a running guess of what each learner knows. When that guess is wrong, the practice and feedback it chooses are wrong too, and the tutor does not know it.",
+      "body": "Using public ASSISTments data from 2,368 learners, I fitted a Bayesian Knowledge Tracing tutor and held out one school at a time. The tutor read each learner's first five answers on a skill and predicted the next ten. I compared two warning signs computed from those five answers: the tutor's own confidence, and how well it had been explaining the answers so far. The second held up better in schools the tutor had never seen, but a warning threshold set on familiar learners did not carry over, and refitting the learner from the same five answers made predictions worse. The tutor can notice it is reading a learner badly; fixing that needs new information from the learner.",
+      "result": "",
+      "whatBuilt": [
+        "Leave-one-school-out evaluation of a Bayesian Knowledge Tracing tutor on ASSISTments 2009 to 2010 data",
+        "Interactive dashboard that shows, learner by learner, what the tutor saw and what it missed"
+      ],
+      "keyResults": [
+        "In schools the tutor had never seen, how well it fitted a learner's first answers flagged the learners it would mispredict better than its own confidence (AUROC 0.65 vs 0.61), but only in 5 of 8 schools: a modest effect",
+        "The tutor's confidence lost ground when moving to a new school (0.67 to 0.61); the fit-based score held steady (0.65 in both)",
+        "A threshold set to flag 20% of familiar learners flagged between 11% and 46% of learners in new schools",
+        "Refitting a flagged learner's starting knowledge from the same five answers made predictions worse, so the next study is a tutor that asks the learner"
+      ],
+      "links": [
+        {
+          "label": "Code on GitHub",
+          "url": "https://github.com/Lamia-Islam/tutor-competence"
+        }
+      ],
+      "status": "Pilot in progress. Code is public and every number reproduces from it; the 'ask the learner' step is the next study.",
+      "figureCaption": "Schematic, not data. The tutor reads the first five answers; when it fits them poorly, the next step is to ask the learner.",
+      "techTags": [
+        "Learner Modelling",
+        "Knowledge Tracing",
+        "Adaptive Learning",
+        "Evaluation"
+      ]
+    },
+    {
+      "num": "02",
       "slug": "ndpai-driver-state-monitoring",
       "title": "Design and Evaluation of a Competence-Gated Driver-State Monitoring System for Autonomous Intervention Control",
       "shortTitle": "Competence-Gated Driver State Monitoring",
@@ -61,7 +97,7 @@
       }
     },
     {
-      "num": "02",
+      "num": "03",
       "slug": "multi-robot-search-and-rescue",
       "title": "Safer Search: Multi-Robot Search and Rescue",
       "shortTitle": "Multi-Robot Search & Rescue Prior",
@@ -88,7 +124,7 @@
       ]
     },
     {
-      "num": "03",
+      "num": "04",
       "slug": "synthetic-wound-segmentation-benchmarks",
       "title": "When Benchmarks Mislead: Medical Image Segmentation",
       "shortTitle": "Benchmark Validity in Medical Segmentation",
