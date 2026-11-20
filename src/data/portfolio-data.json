@@ -45,13 +45,7 @@
         "As a gate on intervention, the best-ranked score held back escalation in 96% of driving windows, against 54% for the classifier's own score",
         "Caught a scale artifact between datasets that inflated detection before reporting"
       ],
-      "links": [
-        {
-          "label": "Code",
-          "url": "https://github.com/Lamia-Islam",
-          "type": "code"
-        }
-      ],
+      "links": [],
       "status": "Sole-author manuscript under review at SN Computer Science (Springer).",
       "figureCaption": "Schematic, not data. Lab and road data separate on a score the model already computes.",
       "techTags": [
@@ -83,13 +77,7 @@
       "keyResults": [
         "Prevents false exploration behind impassable walls in Gazebo Fortress simulations"
       ],
-      "links": [
-        {
-          "label": "Code",
-          "url": "https://github.com/Lamia-Islam",
-          "type": "code"
-        }
-      ],
+      "links": [],
       "status": "Submitted to IEEE ICCIT 2026.",
       "figureCaption": "Schematic, not data. Dashed: belief spreading straight through the wall. Solid: the path-aware version.",
       "techTags": [
