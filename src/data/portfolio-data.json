@@ -78,7 +78,7 @@
         "Prevents false exploration behind impassable walls in Gazebo Fortress simulations"
       ],
       "links": [],
-      "status": "Submitted to IEEE ICCIT 2026.",
+      "status": "Accepted at IEEE ICCIT 2026.",
       "figureCaption": "Schematic, not data. Dashed: belief spreading straight through the wall. Solid: the path-aware version.",
       "techTags": [
         "ROS 2",
