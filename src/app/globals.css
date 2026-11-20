@@ -582,6 +582,36 @@ section.block {
   text-decoration-thickness: 2px;
 }
 
+.social-icons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 30px;
+  margin: 32px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social-icons a {
+  display: inline-flex;
+  color: var(--ink);
+  transition: color 0.15s, transform 0.15s;
+}
+
+.social-icons a:hover {
+  color: var(--link);
+  transform: translateY(-2px);
+}
+
+.social-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.contact-cv {
+  margin-top: 32px;
+}
+
 footer {
   margin-top: clamp(64px, 9vw, 112px);
   border-top: 1px solid var(--rule);

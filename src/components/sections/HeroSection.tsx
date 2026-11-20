@@ -18,47 +18,6 @@ export function HeroSection() {
               <br />
               {profile.subline}
             </div>
-            <ul className="links">
-              <li>
-                <a href={profile.socialLinks.email}>Email</a>
-              </li>
-              <li>
-                <a
-                  href={profile.socialLinks.scholar}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Google Scholar
-                </a>
-              </li>
-              <li>
-                <a
-                  href={profile.socialLinks.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub
-                </a>
-              </li>
-              <li>
-                <a
-                  href={profile.socialLinks.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  LinkedIn
-                </a>
-              </li>
-              <li>
-                <a
-                  href={profile.socialLinks.orcid}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  ORCID
-                </a>
-              </li>
-            </ul>
           </div>
           <a
             className="btn"
